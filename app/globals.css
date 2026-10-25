@@ -92,8 +92,11 @@ main a:not(.btn):not(.brand):hover { text-decoration-color: var(--accent); }
 .split > .panel { max-width: none; }
 
 /* ---- hero (ledger, trace) ---- */
-.hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: var(--space-6); align-items: end; padding-bottom: var(--space-5); }
+.hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: var(--space-4) var(--space-6); align-items: end; padding-bottom: var(--space-5); }
 .hero h1 { max-width: 14ch; }
+/* label and actions take the full row, so headline (left) and lede (right) share the next row */
+.hero > .eyebrow, .hero > .cta-row { grid-column: 1 / -1; }
+.hero > .eyebrow { margin-bottom: 0; }
 .hero .lede { margin-bottom: var(--space-4); }
 .trace-hero { grid-template-columns: minmax(0, 1fr); }
 .flow { border-top: var(--hair); }
@@ -305,6 +308,7 @@ pre.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 1100px) { .site-footer__grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 900px) {
   .hero, .split { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+  .hero { row-gap: var(--space-4); }
 }
 @media (max-width: 640px) {
   main { padding-top: calc(var(--header-h) + var(--space-5)); }
