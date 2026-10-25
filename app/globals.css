@@ -3,6 +3,9 @@
 /* Glasshouse app: the landing's editorial system (base.css + chrome from sections.css), then the app's own pieces.
    Rules: hairlines, never shadows or cards; one accent; weights 400-600; numbers tabular. Every colour is a lock role via var(). */
 
+/* ---- token fix: the faint ink (a 70% mix) fell below 4.5:1; the lock's next ink role is muted ---- */
+:root, [data-theme] { --ink-2: var(--muted); }
+
 /* ---- base (landing base.css) ---- */
 *, *::before, *::after { box-sizing: border-box; }
 html { background: var(--bg-0); color: var(--ink-0); font-family: var(--font-ui); -webkit-font-smoothing: antialiased; text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
