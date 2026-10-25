@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   const email = String(f.get("email") ?? "").trim().toLowerCase(), pw = String(f.get("password") ?? "");
   const u = one<{ id: number; role: keyof typeof HOME; pw: string }>("SELECT id,role,pw FROM users WHERE email=?", email);
   const o = origin(req);
-  if (!u || !checkPw(pw, u.pw)) return Response.redirect(`${o}/login?error=1`, 303);
+  if (!u || !checkPw(pw, u.pw)) return Response.redirect(`${o}/login?error=1&email=${encodeURIComponent(email)}`, 303);
   const res = new Response(null, { status: 303, headers: { location: `${o}${HOME[u.role]}` } });
   res.headers.append("set-cookie", `${COOKIE}=${encodeURIComponent(sign(u.id))}; ${cookieAttrs()}; Max-Age=86400`);
   return res;

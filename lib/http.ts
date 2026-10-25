@@ -10,6 +10,8 @@ export function requireRole(req: Request, role: User["role"]): User | Response {
 /** Public origin for PayPal return URLs and redirects. Never trust the Host header in production. */
 export function origin(req: Request) {
   if (process.env.APP_ORIGIN) return process.env.APP_ORIGIN.replace(/\/$/, "");
-  if (process.env.NODE_ENV === "production") throw new Error("APP_ORIGIN must be set in production (e.g. https://glasshouse.example)");
+  // Only live money needs a pinned origin; a sandbox demo without APP_ORIGIN falls back to the request so sign-in never 500s.
+  if (process.env.PAYPAL_ENV === "live") throw new Error("APP_ORIGIN must be set when PAYPAL_ENV=live (e.g. https://glasshouse.example)");
+  if (process.env.NODE_ENV === "production") console.warn("APP_ORIGIN is not set; using the request origin");
   return new URL(req.url).origin;
 }

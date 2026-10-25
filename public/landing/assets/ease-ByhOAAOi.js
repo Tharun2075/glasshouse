@@ -1,0 +1,1 @@
+import{a as e,i as t,n,r}from"./motion-BmD6kqmK.js";e.registerPlugin(t,r,n);var i=n.create(`award`,`0.65,0.05,0,1`);e.defaults({ease:i,duration:.9});var a=matchMedia(`(prefers-reduced-motion: reduce)`).matches;matchMedia(`(pointer: fine)`).matches;export{a as n,i as t};

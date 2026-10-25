@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { redirect } from "next/navigation";
 import { CircleCheck, Clock, FileText, Inbox, ShieldAlert, TriangleAlert } from "lucide-react";
 import { ledger, mismatches } from "@/lib/ledger.ts";
@@ -21,16 +22,16 @@ export default async function Trustee() {
     done = rows.filter((s) => s.status !== "pending" && s.status !== "held");
   const sum = (xs: Spend[]) => usd(xs.reduce((a, s) => a + s.amount_cents, 0));
   const table = (xs: Spend[], why: boolean) => (<table className="plain cardtable">
-    <thead><tr><th>#</th><th>Appeal</th><th>Vendor</th><th className="r">Amount</th><th>Status</th>{why && <th>Why held</th>}<th>Read by</th><th>Receipt</th><th>Action</th></tr></thead>
-    <tbody>{xs.map((s) => (<tr key={s.id} className={s.status === "held" ? "row-held" : undefined} data-testid={`spend-${s.id}`}>
+    <thead><tr><th>#</th><th>Appeal</th><th>Vendor</th><th className="r">Amount</th><th>Status</th><th>Read by</th><th>Receipt</th><th>Action</th></tr></thead>
+    <tbody>{xs.map((s) => (<Fragment key={s.id}><tr className={s.status === "held" ? "row-held" : undefined} data-testid={`spend-${s.id}`}>
       <td data-label="#" className="mono">{s.id}</td><td data-label="Appeal">{title(s.appeal_id)}</td><td data-label="Vendor" className="c-vendor">{s.vendor}</td>
       <td data-label="Amount" className="mono c-amount">{usd(s.amount_cents)}</td>
       <td data-label="Status"><StatusChip status={s.status} /></td>
-      {why && <td data-label="Why held" className={s.hold_reason ? "c-reason" : "c-empty"}>{s.hold_reason ? <span className="reason"><ShieldAlert className="icon" aria-hidden size={16} />{s.hold_reason}</span> : ""}</td>}
+      {why && <td data-label="Why held" className={s.hold_reason ? "c-reason phone-only" : "c-empty"}>{s.hold_reason ? <span className="reason"><ShieldAlert className="icon" aria-hidden size={16} />{s.hold_reason}</span> : ""}</td>}
       <td data-label="Read by" className="reader">{s.extracted_by === "claude" ? "Claude" : "Demo reader (no AI key)"}</td>
       <td data-label="Receipt"><a className="receipt-link" href={`/api/receipts/${s.id}`} target="_blank" rel="noreferrer"><FileText className="icon" aria-hidden size={16} />View receipt {s.id}</a></td>
       <td data-label="Action" className="c-action"><SpendActions id={s.id} status={s.status} payout={s.payout ? { batch_id: s.payout.batch_id, status: s.payout.status } : null} /></td>
-    </tr>))}</tbody>
+    </tr>{why && s.hold_reason && <tr className="why-row row-held" data-testid={`spend-${s.id}-why`}><td colSpan={8}><span className="reason"><ShieldAlert className="icon" aria-hidden size={16} />Why held: {s.hold_reason}</span></td></tr>}</Fragment>))}</tbody>
   </table>);
   return (<section>
     <div className="hero rise"><h1>Approvals</h1>

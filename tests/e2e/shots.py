@@ -39,7 +39,8 @@ with sync_playwright() as p:
                 for tid, label in (("spend-8", "approve"), ("spend-7", "held")):
                     row = page.locator(f"[data-testid={tid}]"); row.scroll_into_view_if_needed()
                     page.screenshot(path=f"{OUT}/trustee-{label}-{vw}x{vh}.png")
-                    tgt = row.get_by_role("button", name="Approve") if label == "approve" else row.locator(".c-reason")
+                    # Held reason: in-row cell on phones, the "Why held" sub-row under the spend on desktop.
+                    tgt = row.get_by_role("button", name="Approve") if label == "approve" else next((l for l in (row.locator(".c-reason"), page.locator(f"[data-testid={tid}-why] .reason")) if l.count() and l.first.is_visible()), row.locator(".c-reason")).first
                     bb = tgt.bounding_box() if tgt.count() else None
                     extra[label] = bool(bb) and tgt.is_visible() and bb["x"] >= 0 and bb["x"] + bb["width"] <= vw
             ok = not errors and not v and not watermark and page.url.startswith(URL + path.split("?")[0]) and all(extra.values())

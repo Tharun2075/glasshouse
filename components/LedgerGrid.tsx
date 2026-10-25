@@ -85,13 +85,23 @@ export default function LedgerGrid({ data }: { data: Data }) {
     setIds(n);
   }, []);
 
+  // Plain words for the applied filter, never raw JSON.
+  function describe(m: Record<string, any> | null) {
+    const parts = Object.entries(m ?? {}).map(([k, f]: [string, any]) => {
+      const conds = f.conditions ?? [f];
+      const v = conds.map((c: any) => c.type === "inRange" ? `${c.dateFrom ?? c.filter} to ${c.dateTo ?? c.filterTo}` : `${c.type === "greaterThan" || c.type === "greaterThanOrEqual" ? "from " : c.type === "lessThan" || c.type === "lessThanOrEqual" ? "up to " : c.type === "notEqual" ? "not " : ""}${String(c.dateFrom ?? c.filter ?? "").replace(/ 00:00:00$/, "")}`).join(" or ");
+      return `${k} ${v}`;
+    });
+    return parts.length ? `Showing spends where ${parts.join(", ")}.` : "No filter matched those words, so all spends are shown. Try a vendor, category, status or date.";
+  }
+
   async function runNl(e: React.FormEvent) {
     e.preventDefault();
     const r = await fetch("/api/nl-filter", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ q: nl }) });
     const b = await r.json();
     if (!r.ok) { setNlMsg(b.error); return; }
     api.current?.setFilterModel(b.model);
-    setNlMsg(`${b.limit_note ? `${b.limit_note}. ` : ""}Applied filter (${b.by}): ${JSON.stringify(b.model)}`);
+    setNlMsg(`${b.limit_note ? `${b.limit_note}. ` : ""}${describe(b.model)}`);
   }
 
   return (<div>
@@ -109,7 +119,7 @@ export default function LedgerGrid({ data }: { data: Data }) {
       <AgGridReact<Row>
         theme={theme} rowData={rows} columnDefs={cols} context={{ open, toggle }}
         defaultColDef={{ sortable: true, resizable: true, filter: true }}
-        quickFilterText={q} domLayout="autoHeight" pagination paginationPageSize={20} paginationPageSizeSelector={[10, 20, 50]}
+        quickFilterText={q} domLayout="autoHeight" pagination paginationPageSize={typeof window !== "undefined" && window.innerWidth < 640 ? 10 : 20} paginationPageSizeSelector={[10, 20, 50]}
         pinnedBottomRowData={pinned} tooltipShowDelay={200} enableCellTextSelection
         isFullWidthRow={(p) => p.rowNode.data?.kind === "group"} fullWidthCellRenderer={GroupRow}
         isExternalFilterPresent={() => true}

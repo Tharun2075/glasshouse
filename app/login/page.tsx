@@ -1,4 +1,4 @@
-export default async function Login({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+export default async function Login({ searchParams }: { searchParams: Promise<{ error?: string; email?: string }> }) {
   const sp = await searchParams;
   return (<>
     <div className="hero rise"><h1>Sign in</h1>
@@ -6,8 +6,8 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
     <div className="split rise d1"><div className="panel">
     {sp.error && <p className="note err" role="alert">That email and password did not match.</p>}
     <form className="stack" method="post" action="/api/auth/login">
-      <label htmlFor="email">Email</label><input id="email" name="email" type="email" autoComplete="username" required />
-      <label htmlFor="password">Password</label><input id="password" name="password" type="password" autoComplete="current-password" required />
+      <label htmlFor="email">Email</label><input id="email" name="email" type="email" autoComplete="username" required defaultValue={sp.email ?? ""} autoFocus={!sp.error} />
+      <label htmlFor="password">Password</label><input id="password" name="password" type="password" autoComplete="current-password" required autoFocus={!!sp.error} />
       <p><button type="submit" className="btn lg">Sign in</button></p>
     </form></div>
     <div className="panel"><h2>Judges: use these demo logins (sandbox only)</h2>

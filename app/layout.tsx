@@ -28,9 +28,9 @@ const THEME_JS = `try{var t=localStorage.getItem("gh-theme");if(t==="light"||t==
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const u = await currentUser();
-  const links = [{ href: "/ledger", label: "Public ledger" }, { href: "/donate", label: "Donate" }];
-  if (u?.role === "volunteer") links.push({ href: "/volunteer", label: "Upload receipt" });
-  if (u?.role === "trustee") links.push({ href: "/trustee", label: "Approvals" });
+  const links = [{ href: "/ledger", label: "Public ledger", short: "Ledger" }, { href: "/donate", label: "Donate", short: "Give" }];
+  if (u?.role === "volunteer") links.push({ href: "/volunteer", label: "Upload receipt", short: "Receipt" });
+  if (u?.role === "trustee") links.push({ href: "/trustee", label: "Approvals", short: "Approve" });
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: THEME_JS }} /></head>

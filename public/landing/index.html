@@ -17,11 +17,12 @@
     <link rel="apple-touch-icon" href="/landing/apple-touch-icon.png" />
     <link rel="preload" as="image" href="/landing/img/poster.avif" type="image/avif" imagesrcset="/landing/img/poster-1200.avif 1200w, /landing/img/poster.avif 2400w" imagesizes="100vw" fetchpriority="high" />
     <script>document.documentElement.classList.add('js')</script>
-    <script type="module" crossorigin src="/landing/assets/index-B7Oxioq7.js"></script>
+    <script type="module" crossorigin src="/landing/assets/index-S0qeMn_0.js"></script>
     <link rel="modulepreload" crossorigin href="/landing/assets/motion-BmD6kqmK.js">
+    <link rel="modulepreload" crossorigin href="/landing/assets/ease-ByhOAAOi.js">
     <link rel="modulepreload" crossorigin href="/landing/assets/preload-helper-UEEqG8GQ.js">
     <link rel="stylesheet" crossorigin href="/landing/assets/motion-fOJvfYOR.css">
-    <link rel="stylesheet" crossorigin href="/landing/assets/index-ClewGLSn.css">
+    <link rel="stylesheet" crossorigin href="/landing/assets/index-Dm2mQmHR.css">
     <link rel="preload" href="/landing/assets/inter-latin-wght-normal-Dx4kXJAl.woff2" as="font" type="font/woff2" crossorigin="">
   </head>
   <body>
@@ -64,27 +65,27 @@
   </div>
   <ol class="steps">
     <li class="step" data-step>
-      <span class="step__n mono">01 · Give</span>
+      <span class="step__n mono"><span class="step__num">01 · </span><span class="step__word">Give</span></span>
       <h3 class="step__title">A donor gives through PayPal</h3>
       <p class="step__body">The gift is tied to an appeal, such as Winter Food Parcels, and appears on the public ledger straight away.</p>
     </li>
     <li class="step" data-step>
-      <span class="step__n mono">02 · Receipt</span>
+      <span class="step__n mono"><span class="step__num">02 · </span><span class="step__word">Receipt</span></span>
       <h3 class="step__title">A volunteer uploads the receipt</h3>
       <p class="step__body">Money only leaves with proof. Each spend starts as a photo of a real receipt, attached to its row.</p>
     </li>
     <li class="step" data-step>
-      <span class="step__n mono">03 · AI check</span>
+      <span class="step__n mono"><span class="step__num">03 · </span><span class="step__word">AI check</span></span>
       <h3 class="step__title">Claude reads it and flags risk</h3>
       <p class="step__body">Totals, supplier and history are checked. A spend far above the usual, or a likely duplicate, is held in amber.</p>
     </li>
     <li class="step" data-step>
-      <span class="step__n mono">04 · Approve</span>
+      <span class="step__n mono"><span class="step__num">04 · </span><span class="step__word">Approve</span></span>
       <h3 class="step__title">A trustee makes the call</h3>
       <p class="step__body">A person, not the model, approves or rejects. The reason is written next to the row for anyone to read.</p>
     </li>
     <li class="step" data-step>
-      <span class="step__n mono">05 · Payout</span>
+      <span class="step__n mono"><span class="step__num">05 · </span><span class="step__word">Payout</span></span>
       <h3 class="step__title">PayPal pays the supplier</h3>
       <p class="step__body">PayPal Payouts sends the money and the batch id is stamped on the row, so the trail ends at a real transfer.</p>
     </li>
@@ -120,19 +121,22 @@
 <section class="s s--split-statement" id="held"><div class="wrap grid split">
   <div class="split__aside">
     <p class="eyebrow mono">Held, not hidden</p>
-    <p class="split__note mono">Appeals: Winter Food Parcels · Kitchen Equipment · Delivery Van Fuel</p>
+    
+    <ul class="chips" aria-label="Appeals"><li class="chip"><span>Winter Food Parcels</span><span class="chip__v mono">goal $3,000</span></li><li class="chip"><span>Kitchen Equipment</span><span class="chip__v mono">goal $1,500</span></li><li class="chip"><span>Delivery Van Fuel</span><span class="chip__v mono">goal $600</span></li></ul>
   </div>
   <div class="split__main">
     <h2 class="split__statement" data-reveal>“$480.00 is more than 3x the rolling mean of the last 3 spends.”</h2>
     <p class="split__body">That is a real flag from the demo ledger. Another reads “looks like a duplicate of spend #5”. Held spends stay visible in amber until a trustee decides, and the reason stays on the row.</p>
   </div>
 </div></section>
-<section class="s s--cta" id="cta" aria-label="Follow one gift end to end."><div class="wrap cta__inner">
+<section class="s s--cta" id="cta" aria-label="Follow one gift end to end."><div class="wrap cta__grid has-image"><div class="cta__inner">
   <p class="eyebrow mono">See it for yourself</p>
   <h2 class="cta__title" data-reveal>Follow one gift <em>end to end</em>.</h2>
   <p class="cta__body">Gift 12 goes from donor to receipt to AI check to payout. Every step is on one page.</p>
   <div class="magnet"><a class="btn btn--primary btn--lg" href="/trace/12"><span>Trace a gift</span></a></div>
   <p class="cta__note mono">Sandbox demo for the PayPal AI Hackathon. Northside Food Bank is a fictional charity.</p>
+</div>
+  <a class="cta__shot" href="/trace/12" tabindex="-1" aria-hidden="true"><img src="/landing/img/trace.webp" alt="" width="1100" height="688" loading="lazy" decoding="async" /></a>
 </div></section></main>
     <footer class="site-footer" id="footer"><div class="wrap site-footer__grid">
   <div class="site-footer__brand">

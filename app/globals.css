@@ -341,3 +341,17 @@ footer.site .sandbox { display: inline-flex; gap: 8px; align-items: center; }
 /* the one page transition: soft crossfade between the landing and app pages (same rule in the landing) */
 @view-transition { navigation: auto; }
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+
+/* UX review 2026-10-25: tap targets, short nav labels on phones, trustee hold reason on its own full-width row. */
+header.top nav a { min-height: 44px; display: inline-flex; align-items: center; }
+.nl-short { display: none; }
+.ag-paging-button { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+.phone-only { display: none; }
+tr.why-row td { padding-top: 0; }
+tr.why-row .reason { display: flex; gap: 8px; align-items: flex-start; color: var(--held); font-weight: 600; font-size: 14px; background: var(--held-bg); border: 1px solid color-mix(in oklab, var(--held) 30%, transparent); border-radius: var(--r-sm); padding: 8px 10px; }
+tr.why-row .reason .icon { margin-top: 3px; flex: none; }
+@media (max-width: 640px) {
+  .nl-long { display: none; } .nl-short { display: inline; }
+  table.cardtable td.phone-only { display: block; }
+  table.cardtable tr.why-row { display: none; }
+}
