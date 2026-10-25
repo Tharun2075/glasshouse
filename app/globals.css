@@ -207,6 +207,12 @@ table.plain td.c-vendor { font-weight: 650; }
 .grid-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; margin: 8px 0 12px; }
 .grid-tools input { min-width: 220px; flex: 1; }
 .grid-tools label { margin: 0 0 6px; }
+.grid-tools .field { flex: 1 1 220px; min-width: 0; } .grid-tools .field input { width: 100%; min-width: 0; }
+.grid-tools label { display: flex; gap: 6px; align-items: center; }
+.grid-tools form.nl { flex: 2 1 300px; display: flex; gap: 8px; align-items: end; min-width: 0; }
+.nl-msg { font-family: var(--font-mono); font-size: 13px; overflow-wrap: anywhere; }
+.group-row { display: flex; gap: 12px; align-items: center; padding: 0 12px; height: 100%; min-width: 0; }
+.group-row .muted { font-size: 14px; font-variant-numeric: tabular-nums; }
 .row-held { background: var(--held-bg) !important; color: var(--held); }
 .row-group { font-weight: 700; background: var(--tint) !important; }
 .row-paid .ag-cell[col-id="status"] { color: var(--paid); }

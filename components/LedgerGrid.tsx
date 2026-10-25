@@ -3,13 +3,15 @@
 // hierarchy is built by hand: full-width appeal rows toggle their spends via an external filter.
 import { useCallback, useMemo, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
+import { ChevronDown, ChevronRight, Download, Eraser, FileText, Hourglass, Search, Sparkles } from "lucide-react";
+import StatusChip from "./StatusChip.tsx";
 import { AllCommunityModule, ModuleRegistry, themeQuartz, type ColDef, type GridApi, type IRowNode } from "ag-grid-community";
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const theme = themeQuartz.withParams({
   backgroundColor: "var(--surface)", foregroundColor: "var(--ink)", accentColor: "var(--accent)", borderColor: "var(--line)",
   headerBackgroundColor: "var(--tint)", oddRowBackgroundColor: "var(--grid-row-alt)", rowHoverColor: "var(--grid-hover)",
-  fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif", fontSize: 14,
+  fontFamily: "var(--font-sans)", fontSize: 14, headerFontWeight: 650, rowHeight: 48, headerHeight: 44, wrapperBorderRadius: 14,
 });
 
 type SpendRow = { id: number; appeal_id: number; vendor: string; date: string; amount_cents: number; category: string; status: string; hold_reason: string | null;
@@ -23,9 +25,9 @@ const money = (n: number) => (n ?? 0).toLocaleString("en-US", { style: "currency
 function GroupRow(p: { data: Extract<Row, { kind: "group" }>; context: { open: Set<number>; toggle(id: number): void } }) {
   const open = p.context.open.has(p.data.appeal_id);
   // role="gridcell": a full-width row is role="row", which may only hold cells (axe aria-required-children).
-  return (<div role="gridcell" style={{ display: "flex", gap: 12, alignItems: "center", padding: "0 12px", height: "100%" }}>
-    <button className="ghost" style={{ padding: "0 8px" }} aria-expanded={open} aria-label={`${open ? "Collapse" : "Expand"} ${p.data.title}`} onClick={() => p.context.toggle(p.data.appeal_id)}>{open ? "▾" : "▸"}</button>
-    <strong>{p.data.title}</strong><span>{p.data.count} spends · {money(p.data.total)}</span>
+  return (<div role="gridcell" className="group-row">
+    <button type="button" className="ghost grid-toggle" aria-expanded={open} aria-label={`${open ? "Collapse" : "Expand"} ${p.data.title}`} onClick={() => p.context.toggle(p.data.appeal_id)}>{open ? <ChevronDown className="icon" aria-hidden size={18} /> : <ChevronRight className="icon" aria-hidden size={18} />}</button>
+    <strong>{p.data.title}</strong><span className="muted">{p.data.count} spends · {money(p.data.total)}</span>
     {p.data.held > 0 && <span className="pill held">{p.data.held} held</span>}
   </div>);
 }
@@ -65,11 +67,11 @@ export default function LedgerGrid({ data }: { data: Data }) {
     { field: "category" as any, headerName: "Category", width: 120, filter: "agTextColumnFilter" },
     { field: "amount" as any, headerName: "Amount", width: 130, filter: "agNumberColumnFilter", type: "rightAligned", valueFormatter: (p) => (p.value == null ? "" : money(p.value)),
       cellClassRules: { "mono": () => true } },
-    { field: "status" as any, headerName: "Status", width: 120, filter: "agTextColumnFilter", filterParams: { maxNumConditions: 5 }, cellRenderer: (p: any) => p.value ? <span className={`pill ${p.value}`}>{p.value}</span> : null },
+    { field: "status" as any, headerName: "Status", width: 120, filter: "agTextColumnFilter", filterParams: { maxNumConditions: 5 }, cellRenderer: (p: any) => p.value ? <StatusChip status={p.value} /> : null },
     { field: "reason" as any, headerName: "Why held / flags", flex: 1, minWidth: 180, tooltipField: "reason" as any },
     { field: "payout" as any, headerName: "Payout batch", flex: 1, minWidth: 160, tooltipField: "payout" as any },
     { field: "receipt" as any, headerName: "Receipt", flex: 1, minWidth: 120, sortable: false, filter: false, cellRenderer: (p: any) => !p.value ? null
-      : p.data.status === "approved" || p.data.status === "paid" ? <a href={p.value} target="_blank" rel="noreferrer">View receipt</a> : <span className="muted">After review</span> },
+      : p.data.status === "approved" || p.data.status === "paid" ? <a className="receipt-link" href={p.value} target="_blank" rel="noreferrer"><FileText className="icon" aria-hidden size={16} />View receipt</a> : <span className="reader"><Hourglass className="icon" aria-hidden size={14} />After review</span> },
   ], []);
 
   const spendsOnly = rows.filter((r): r is Extract<Row, { kind: "spend" }> => r.kind === "spend");
@@ -86,15 +88,15 @@ export default function LedgerGrid({ data }: { data: Data }) {
 
   return (<div>
     <div className="grid-tools">
-      <div style={{ flex: 1, minWidth: 220 }}><label htmlFor="q">Search all columns</label><input id="q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="vendor, category, status…" style={{ width: "100%" }} /></div>
-      <form onSubmit={runNl} style={{ flex: 2, minWidth: 260, display: "flex", gap: 8, alignItems: "end" }}>
-        <div style={{ flex: 1 }}><label htmlFor="nl">Ask in plain words</label><input id="nl" value={nl} onChange={(e) => setNl(e.target.value)} placeholder="spends over $100" style={{ width: "100%" }} /></div>
+      <div className="field"><label htmlFor="q"><Search className="icon" aria-hidden size={14} /> Search all columns</label><input id="q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="vendor, category, status…" /></div>
+      <form onSubmit={runNl} className="nl">
+        <div className="field"><label htmlFor="nl"><Sparkles className="icon" aria-hidden size={14} /> Ask in plain words</label><input id="nl" value={nl} onChange={(e) => setNl(e.target.value)} placeholder="unpaid kitchen spends since 1 Oct" /></div>
         <button type="submit">Filter</button>
       </form>
-      <button className="ghost" type="button" onClick={() => { api.current?.setFilterModel(null); setQ(""); setNlMsg(""); }}>Clear</button>
-      <button className="ghost" type="button" onClick={() => api.current?.exportDataAsCsv({ fileName: "glasshouse-ledger.csv", shouldRowBeSkipped: (p) => p.node.data?.kind === "group" })}>Export CSV</button>
+      <button className="ghost" type="button" onClick={() => { api.current?.setFilterModel(null); setQ(""); setNlMsg(""); }}><Eraser className="icon" aria-hidden size={16} />Clear</button>
+      <button className="ghost" type="button" onClick={() => api.current?.exportDataAsCsv({ fileName: "glasshouse-ledger.csv", shouldRowBeSkipped: (p) => p.node.data?.kind === "group" })}><Download className="icon" aria-hidden size={16} />Export CSV</button>
     </div>
-    {nlMsg && <p className="muted mono" role="status">{nlMsg}</p>}
+    {nlMsg && <p className="note nl-msg" role="status">{nlMsg}</p>}
     <div className="gridwrap">
       <AgGridReact<Row>
         theme={theme} rowData={rows} columnDefs={cols} context={{ open, toggle }}
