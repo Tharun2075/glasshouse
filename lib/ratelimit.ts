@@ -4,15 +4,23 @@ import { RateLimiterMemory } from "rate-limiter-flexible";
 import { json } from "./http.ts";
 
 const limiters = new Map<string, RateLimiterMemory>();
-/** Client IP. Behind a proxy, set TRUST_PROXY=1 so the first x-forwarded-for hop is used; otherwise it is spoofable. */
-export const clientIp = (req: Request) =>
-  (process.env.TRUST_PROXY === "1" && req.headers.get("x-forwarded-for")?.split(",")[0].trim()) || req.headers.get("x-real-ip") || "direct";
+/** Client key. Next route handlers get no socket address, so headers are trusted only when TRUST_PROXY=1
+ *  (our own proxy appends the real IP, so the RIGHTMOST x-forwarded-for hop is used; leftmost is client-spoofable).
+ *  Without a trusted proxy every caller shares one "direct" bucket that gets a higher global cap (see limit()). */
+export const clientIp = (req: Request): string | null => {
+  if (process.env.TRUST_PROXY !== "1") return null;
+  const hops = req.headers.get("x-forwarded-for")?.split(",").map((h) => h.trim()).filter(Boolean) ?? [];
+  return hops.at(-1) || req.headers.get("x-real-ip") || null;
+};
 
 /** Returns a 429 Response when the caller is over `points` per `seconds`, else null. */
 export async function limit(name: string, req: Request, points = 10, seconds = 60): Promise<Response | null> {
-  let l = limiters.get(name);
-  if (!l) limiters.set(name, (l = new RateLimiterMemory({ points, duration: seconds })));
-  try { await l.consume(clientIp(req)); return null; }
+  const ip = clientIp(req);
+  // unidentified callers share one bucket, so it gets 6x the per-IP cap instead of letting one caller lock everyone out at 10
+  const key = ip ? name : `${name}:global`, cap = ip ? points : points * 6;
+  let l = limiters.get(key);
+  if (!l) limiters.set(key, (l = new RateLimiterMemory({ points: cap, duration: seconds })));
+  try { await l.consume(ip ?? "direct"); return null; }
   catch (r) {
     const wait = Math.ceil(((r as { msBeforeNext?: number }).msBeforeNext ?? 60_000) / 1000);
     const res = json({ error: `too many requests; try again in ${wait}s` }, 429);
