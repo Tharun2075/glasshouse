@@ -66,8 +66,13 @@ export class ClaudeExtractor implements Extractor {
   }
 }
 
+/** Org-wide keys must name a workspace on every request (else HTTP 400 "not scoped to a workspace"). */
+export function anthropicOptions(env: Record<string, string | undefined> = process.env) {
+  return { defaultHeaders: env.ANTHROPIC_WORKSPACE_ID ? { "anthropic-workspace-id": env.ANTHROPIC_WORKSPACE_ID } : undefined };
+}
+
 export async function defaultExtractor(): Promise<Extractor> {
   if (!process.env.ANTHROPIC_API_KEY) return MockExtractor.fromDisk();
   const { default: Anthropic } = await import("@anthropic-ai/sdk");
-  return new ClaudeExtractor(new Anthropic() as unknown as MessagesClient);
+  return new ClaudeExtractor(new Anthropic(anthropicOptions()) as unknown as MessagesClient);
 }

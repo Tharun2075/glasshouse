@@ -1,6 +1,6 @@
 // Plain English -> AG Grid filter model. Claude when ANTHROPIC_API_KEY is set, else a small rule parser (labelled "rules").
 import { z } from "zod";
-import { MODEL } from "./extract.ts";
+import { MODEL, anthropicOptions } from "./extract.ts";
 
 export const Intent = z.object({
   status: z.enum(["pending", "held", "approved", "paid", "rejected"]).nullable(),
@@ -37,7 +37,7 @@ export function toFilterModel(i: Intent) {
 
 export async function nlToFilter(q: string, client?: { messages: { create(b: any): Promise<any> } }) {
   if (!client && !process.env.ANTHROPIC_API_KEY) return { by: "rules", intent: ruleIntent(q), model: toFilterModel(ruleIntent(q)) };
-  if (!client) { const { default: Anthropic } = await import("@anthropic-ai/sdk"); client = new Anthropic() as any; }
+  if (!client) { const { default: Anthropic } = await import("@anthropic-ai/sdk"); client = new Anthropic(anthropicOptions()) as any; }
   const msg = await client!.messages.create({ model: MODEL, max_tokens: 512, output_config: { format: { type: "json_schema", schema: SCHEMA } },
     messages: [{ role: "user", content: `Turn this question about a charity spending ledger into filters. Amounts are USD numbers. Question: ${q.slice(0, 300)}` }] });
   if (msg.stop_reason === "refusal") throw new Error("model refused");
