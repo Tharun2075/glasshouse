@@ -16,7 +16,7 @@ type SpendRow = { id: number; appeal_id: number; vendor: string; date: string; a
   flags: string[]; confidence: number; funded_by: number; payout: { batch_id: string | null; status: string } | null };
 type Data = { appeals: { id: number; title: string; raised_cents: number; spent_cents: number }[]; spends: SpendRow[] };
 type Row = { kind: "group"; appeal_id: number; title: string; count: number; total: number; held: number }
-  | { kind: "spend"; appeal_id: number; id: number; vendor: string; date: string; amount: number; category: string; status: string; reason: string; funded_by: number; payout: string; receipt: string };
+  | { kind: "spend"; appeal_id: number; appeal: string; id: number; vendor: string; date: string; amount: number; category: string; status: string; reason: string; funded_by: number; payout: string; receipt: string };
 
 const money = (n: number) => (n ?? 0).toLocaleString("en-US", { style: "currency", currency: "USD" });
 
@@ -49,20 +49,23 @@ export default function LedgerGrid({ data }: { data: Data }) {
   const rows = useMemo<Row[]>(() => data.appeals.flatMap((a) => {
     const sp = data.spends.filter((s) => s.appeal_id === a.id);
     return [{ kind: "group", appeal_id: a.id, title: a.title, count: sp.length, total: sp.reduce((t, s) => t + s.amount_cents, 0) / 100, held: sp.filter((s) => s.status === "held").length } as Row,
-      ...sp.map((s) => ({ kind: "spend", appeal_id: a.id, id: s.id, vendor: s.vendor, date: s.date, amount: s.amount_cents / 100, category: s.category, status: s.status,
+      ...sp.map((s) => ({ kind: "spend", appeal_id: a.id, appeal: a.title, id: s.id, vendor: s.vendor, date: s.date, amount: s.amount_cents / 100, category: s.category, status: s.status,
         reason: s.hold_reason ?? (s.flags.length ? s.flags.join(", ") : ""), funded_by: s.funded_by, payout: s.payout ? `${s.payout.status}${s.payout.batch_id ? ` · ${s.payout.batch_id}` : ""}` : "", receipt: `/api/receipts/${s.id}` }) as Row)];
   }), [data]);
 
   const cols = useMemo<ColDef<Row>[]>(() => [
     { field: "id" as any, headerName: "#", width: 70, filter: "agNumberColumnFilter" },
-    { field: "date" as any, headerName: "Date", width: 120, filter: "agDateColumnFilter", sort: undefined },
+    // Dates are "YYYY-MM-DD" strings; inclusive range so "since 1 Oct" keeps 1 Oct itself.
+    { field: "date" as any, headerName: "Date", width: 120, cellDataType: "dateString", filter: "agDateColumnFilter", filterParams: { inRangeInclusive: true }, sort: undefined },
+    // Hidden: lets the plain-words filter match an appeal name ("kitchen equipment") without touching category.
+    { field: "appeal" as any, headerName: "Appeal", hide: true, filter: "agTextColumnFilter" },
     // Phones hide the "Why held" column, so a held row repeats its reason under the vendor (CSS shows .why only below 640px).
     { field: "vendor" as any, headerName: "Vendor", flex: 1, minWidth: 120, filter: "agTextColumnFilter", autoHeight: true,
       cellRenderer: (p: any) => (<div className="vendor-cell">{p.value}{p.data?.status === "held" && p.data.reason && <span className="why">{p.data.reason}</span>}</div>) },
     { field: "category" as any, headerName: "Category", width: 120, filter: "agTextColumnFilter" },
     { field: "amount" as any, headerName: "Amount", width: 130, filter: "agNumberColumnFilter", type: "rightAligned", valueFormatter: (p) => (p.value == null ? "" : money(p.value)),
       cellClassRules: { "mono": () => true } },
-    { field: "status" as any, headerName: "Status", width: 120, filter: "agTextColumnFilter", cellRenderer: (p: any) => p.value ? <span className={`pill ${p.value}`}>{p.value}</span> : null },
+    { field: "status" as any, headerName: "Status", width: 120, filter: "agTextColumnFilter", filterParams: { maxNumConditions: 5 }, cellRenderer: (p: any) => p.value ? <span className={`pill ${p.value}`}>{p.value}</span> : null },
     { field: "reason" as any, headerName: "Why held / flags", flex: 1, minWidth: 180, tooltipField: "reason" as any },
     { field: "payout" as any, headerName: "Payout batch", flex: 1, minWidth: 160, tooltipField: "payout" as any },
     { field: "receipt" as any, headerName: "Receipt", flex: 1, minWidth: 120, sortable: false, filter: false, cellRenderer: (p: any) => !p.value ? null

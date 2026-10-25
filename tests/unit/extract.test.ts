@@ -37,7 +37,7 @@ describe("NL -> AG Grid filter", () => {
     expect(m.amount).toMatchObject({ filterType: "number", type: "greaterThan", filter: 100 });
   });
   it("uses Claude when a client is given", async () => {
-    const c = client(JSON.stringify(ruleIntent("held spends")));
+    const c = client(JSON.stringify(ruleIntent("held spends", { today: "2026-10-25" })));
     const r = await nlToFilter("held spends", c);
     expect(r.by).toBe("claude");
   });
