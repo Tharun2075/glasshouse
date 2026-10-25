@@ -13,7 +13,7 @@
   --bg-2: var(--tint);
   --ink-0: var(--ink);
   --ink-1: var(--muted);
-  --ink-2: color-mix(in oklab, var(--muted) 70%, var(--bg));
+  --ink-2: color-mix(in oklab, var(--muted) 88%, var(--bg)); /* 88%: 5.2:1 on --bg light (70% was 3.51, axe fail) */
   --accent-ink: var(--surface); /* text on --accent; dark theme overrides */
   --accent-tint: var(--tint);
   --accent-glow: color-mix(in srgb, var(--accent) 35%, transparent);
