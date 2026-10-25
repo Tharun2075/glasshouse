@@ -51,3 +51,13 @@ describe("money", () => {
     expect(() => toCents("1.234")).toThrow();
   });
 });
+
+describe("session cookie (N4)", () => {
+  it("adds Secure only when APP_ORIGIN is https", async () => {
+    const { cookieAttrs } = await import("@/lib/auth.ts");
+    const old = process.env.APP_ORIGIN;
+    process.env.APP_ORIGIN = "https://glasshouse.example"; expect(cookieAttrs()).toContain("; Secure");
+    process.env.APP_ORIGIN = "http://127.0.0.1:3000"; expect(cookieAttrs()).not.toContain("Secure");
+    process.env.APP_ORIGIN = old;
+  });
+});

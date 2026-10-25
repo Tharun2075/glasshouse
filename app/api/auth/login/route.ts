@@ -1,5 +1,5 @@
 import { one } from "@/lib/db.ts";
-import { checkPw, sign, COOKIE } from "@/lib/auth.ts";
+import { checkPw, sign, COOKIE, cookieAttrs } from "@/lib/auth.ts";
 import { origin } from "@/lib/http.ts";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,6 +11,6 @@ export async function POST(req: Request) {
   const o = origin(req);
   if (!u || !checkPw(pw, u.pw)) return Response.redirect(`${o}/login?error=1`, 303);
   const res = new Response(null, { status: 303, headers: { location: `${o}${HOME[u.role]}` } });
-  res.headers.append("set-cookie", `${COOKIE}=${encodeURIComponent(sign(u.id))}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`);
+  res.headers.append("set-cookie", `${COOKIE}=${encodeURIComponent(sign(u.id))}; ${cookieAttrs()}; Max-Age=86400`);
   return res;
 }

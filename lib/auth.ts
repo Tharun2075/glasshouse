@@ -3,6 +3,8 @@ import { one } from "./db.ts";
 
 export type User = { id: number; email: string; name: string; role: "donor" | "volunteer" | "trustee" };
 export const COOKIE = "gh_session";
+/** Cookie attributes; Secure whenever the app is served over https (N4). */
+export const cookieAttrs = () => `Path=/; HttpOnly; SameSite=Lax${(process.env.APP_ORIGIN ?? "").startsWith("https") ? "; Secure" : ""}`;
 /** Cookies are HMAC-signed with SESSION_SECRET; with no strong secret anyone could forge a trustee cookie, so refuse. */
 export function assertSessionSecret() {
   const s = process.env.SESSION_SECRET ?? "";
