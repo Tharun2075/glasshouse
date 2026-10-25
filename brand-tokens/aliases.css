@@ -1,0 +1,56 @@
+/* Shared design tokens for the app and the landing (PLAN 2.1). tokens.css is generated and hash-checked, so the
+   landing names, type scale, space and motion live here. No colour literals: every colour is a lock role via var().
+   build-landing.mjs copies tokens.css + this file into the landing's src/styles/tokens.generated.css.
+   Theme: dark is the default (<html data-theme="dark">); only a stored "light" choice switches it. */
+/* Arial with Inter's metrics: text laid out before Inter Variable arrives wraps the same, so the swap never moves a line */
+@font-face { font-family: 'Inter Fallback'; src: local('Arial'), local('ArialMT'); size-adjust: 107.12%; ascent-override: 90.44%; descent-override: 22.52%; line-gap-override: 0%; }
+@font-face { font-family: 'Inter Fallback'; font-style: italic; src: local('Arial Italic'), local('Arial-ItalicMT'); size-adjust: 107.12%; ascent-override: 90.44%; descent-override: 22.52%; line-gap-override: 0%; }
+@font-face { font-family: 'JetBrains Mono Fallback'; src: local('Courier New'), local('CourierNewPSMT'); size-adjust: 100%; ascent-override: 102%; descent-override: 30%; line-gap-override: 0%; }
+:root {
+  /* colour: landing names over the lock roles */
+  --bg-0: var(--bg);
+  --bg-1: var(--surface);
+  --bg-2: var(--tint);
+  --ink-0: var(--ink);
+  --ink-1: var(--muted);
+  --ink-2: color-mix(in oklab, var(--muted) 70%, var(--bg));
+  --accent-ink: var(--surface); /* text on --accent; dark theme overrides */
+  --accent-tint: var(--tint);
+  --accent-glow: color-mix(in srgb, var(--accent) 35%, transparent);
+
+  /* type: Inter + JetBrains Mono */
+  --font-display: 'Inter Variable', Inter, 'Inter Fallback', system-ui, sans-serif;
+  --font-ui: 'Inter Variable', Inter, 'Inter Fallback', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', 'JetBrains Mono Fallback', ui-monospace, monospace;
+  --font-sans: var(--font-ui);
+  --step-hero: clamp(2.6rem, 1.7rem + 3.2vw, 4.75rem);
+  --step-big: clamp(5rem, 3.5rem + 9vw, 14rem);
+  --step-2: clamp(2.1rem, 1.5rem + 2.2vw, 3.6rem);
+  --step-1: clamp(1.6rem, 1.25rem + 1.4vw, 2.6rem);
+  --step-0: 1.0625rem;
+  --step--1: 0.875rem;
+  --step-3: var(--step-2);
+  --step-4: var(--step-big);
+  --leading-tight: 1.02;
+  --leading-body: 1.55;
+
+  /* space + layout */
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 1rem; --space-4: 1.5rem;
+  --space-5: 2.5rem; --space-6: 4rem; --space-7: 6.5rem; --space-8: 10rem;
+  --section-y: clamp(3rem, 2rem + 4vw, 6rem);
+  --gutter: clamp(1.25rem, 0.6rem + 3.2vw, 4.5rem);
+  --container: 1280px;
+  --header-h: 4.5rem;
+  --hair: 1px solid var(--line);
+
+  /* radii */
+  --radius-s: 6px; --radius-m: 12px; --radius-l: 20px; --radius-pill: 999px;
+
+  /* motion: 160ms cubic-bezier(.2,0,0,1) for UI; scroll scenes keep longer durations */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-1: 0.16s; --dur-2: 0.4s; --dur-3: 0.9s; --dur-4: 1.4s;
+
+  color-scheme: light;
+}
+[data-theme="dark"] { --accent-ink: var(--bg); color-scheme: dark; }

@@ -1,13 +1,10 @@
+import "./fonts.css";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
 import { currentUser } from "@/lib/session.ts";
 import NavLinks from "@/components/NavLinks.tsx";
 import ThemeToggle from "@/components/ThemeToggle.tsx";
 import Footer from "@/components/Footer.tsx";
-
-const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 const title = "Glasshouse — every dollar, in the open";
 const description = "A transparent ledger for small charities. Sandbox demo.";
@@ -19,12 +16,12 @@ export const metadata: Metadata = {
   openGraph: { title, description, type: "website", images: [og] },
   twitter: { card: "summary_large_image", title, description, images: [og.url] },
 };
-// themeColor values are the lock's --bg for light and dark (brand-tokens/tokens.css).
-export const viewport: Viewport = { colorScheme: "light dark", themeColor: [{ media: "(prefers-color-scheme: light)", color: "#F6F7FB" }, { media: "(prefers-color-scheme: dark)", color: "#0E1022" }] };
+// Dark is the default; only a stored "light" choice changes it (system preference is ignored, PLAN 2.1).
+export const viewport: Viewport = { colorScheme: "dark light" };
 export const dynamic = "force-dynamic";
 
-// Applies a saved light/dark choice before first paint, so there is no flash.
-const THEME_JS = `try{var t=localStorage.getItem("gh-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+// Applies a saved light choice before first paint, so there is no flash; anything else stays dark.
+const THEME_JS = `try{if(localStorage.getItem("gh-theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}`;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const u = await currentUser();
@@ -32,7 +29,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   if (u?.role === "volunteer") links.push({ href: "/volunteer", label: "Upload receipt", short: "Receipt" });
   if (u?.role === "trustee") links.push({ href: "/trustee", label: "Approvals", short: "Approve" });
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: THEME_JS }} /></head>
       <body>
         <a className="skip" href="#main">Skip to content</a>

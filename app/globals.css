@@ -1,21 +1,15 @@
 @import "../brand-tokens/tokens.css";
+@import "../brand-tokens/aliases.css";
 /* Glasshouse design system. Every colour is a BRAND.lock role from tokens.css; tints and glows mix lock roles only. */
 :root {
-  color-scheme: light;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --ease: cubic-bezier(.2, 0, 0, 1); --dur: 160ms;
+  --dur: 160ms;
   --r-sm: 8px; --r: 14px; --r-lg: 22px;
   --shadow: 0 1px 2px color-mix(in oklab, var(--ink) 6%, transparent), 0 8px 24px -12px color-mix(in oklab, var(--ink) 18%, transparent);
   --shadow-lift: 0 2px 4px color-mix(in oklab, var(--ink) 8%, transparent), 0 18px 40px -18px color-mix(in oklab, var(--accent) 45%, transparent);
   --glass: color-mix(in oklab, var(--surface) 82%, transparent);
   --wash: radial-gradient(1200px 520px at 85% -10%, color-mix(in oklab, var(--highlight) 22%, transparent), transparent 60%),
           radial-gradient(900px 480px at -10% 0%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 60%);
-  --step--1: .875rem; --step-0: 1rem; --step-1: 1.25rem; --step-2: clamp(1.4rem, 1.2rem + .8vw, 1.75rem);
-  --step-3: clamp(1.9rem, 1.4rem + 2.2vw, 2.75rem); --step-4: clamp(2.3rem, 1.5rem + 3.6vw, 4rem);
 }
-[data-theme="dark"] { color-scheme: dark; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; } }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }
