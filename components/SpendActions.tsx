@@ -14,7 +14,7 @@ export default function SpendActions({ id, status, payout }: { id: number; statu
   if (st === "held") return <span className="muted">No payout while held</span>;
   return (<div className="actions">
     {st === "pending" && <button disabled={busy} onClick={() => call(`/api/spends/${id}/approve`)}>Approve and pay</button>}
-    {p && <span className="mono" data-testid={`batch-${id}`}>{label(p)}</span>}
+    {p && <span className={p.status === "IMPORTED" ? "muted" : "mono"} data-testid={`batch-${id}`}>{label(p)}</span>}
     {p?.batch_id && p.status !== "SUCCESS" && <button className="ghost" disabled={busy} onClick={() => call(`/api/payouts/${id}/poll`)}>Check payout</button>}
     {p && !p.batch_id && p.status.startsWith("ERROR") && <button className="ghost" disabled={busy} onClick={() => call("/api/payouts", { spend_id: id })}>Retry payout</button>}
     {err && <span className="err" role="alert">{err}</span>}
