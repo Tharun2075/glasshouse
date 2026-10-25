@@ -230,6 +230,12 @@ ol.steps li { counter-increment: s; background: var(--surface); border: 1px soli
 ol.steps li strong::before { content: counter(s); display: inline-grid; place-items: center; width: 26px; height: 26px; margin-right: 8px; border-radius: 999px; background: var(--tint); color: var(--accent); font-size: 14px; }
 ol.steps li span { color: var(--muted); font-size: 14px; }
 
+.tight { margin: 0; }
+pre.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.panel.result { margin-top: 16px; max-width: none; }
+.split > .panel { max-width: none; }
+ol.steps.vertical { grid-template-columns: 1fr; } ol.steps.vertical li strong::before { display: none; }
+ol.steps li strong { display: flex; gap: 6px; align-items: center; }
 pre { background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 12px; overflow-x: auto; font-size: 13px; }
 
 /* Footer */
