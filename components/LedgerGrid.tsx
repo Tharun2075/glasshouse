@@ -101,7 +101,7 @@ export default function LedgerGrid({ data }: { data: Data }) {
       <AgGridReact<Row>
         theme={theme} rowData={rows} columnDefs={cols} context={{ open, toggle }}
         defaultColDef={{ sortable: true, resizable: true, filter: true }}
-        quickFilterText={q} pagination paginationPageSize={20} paginationPageSizeSelector={[10, 20, 50]}
+        quickFilterText={q} domLayout="autoHeight" pagination paginationPageSize={20} paginationPageSizeSelector={[10, 20, 50]}
         pinnedBottomRowData={pinned} tooltipShowDelay={200} enableCellTextSelection
         isFullWidthRow={(p) => p.rowNode.data?.kind === "group"} fullWidthCellRenderer={GroupRow}
         isExternalFilterPresent={() => true}
