@@ -1,0 +1,75 @@
+{
+ "n": 3,
+ "file": "data/receipts/r5.png",
+ "appeal_id": 3,
+ "model": "claude-sonnet-5-5",
+ "at_utc": "2026-10-25T03:54:46.088Z",
+ "expected": {
+  "vendor": "Northgate Fuel Stop",
+  "date": "2026-10-01",
+  "amount": 35,
+  "currency": "USD",
+  "category": "Fuel",
+  "line_items": [
+   {
+    "description": "Diesel 21.9 L",
+    "amount": 35
+   }
+  ],
+  "confidence": 0.94
+ },
+ "by": "claude",
+ "extracted": {
+  "vendor": "NORTHGATE FUEL STOP",
+  "date": "2026-10-01",
+  "amount": 35,
+  "currency": "USD",
+  "category": "transport",
+  "line_items": [
+   {
+    "description": "Diesel 21.9 L",
+    "amount": 35
+   }
+  ],
+  "confidence": 0.95
+ },
+ "ledger": {
+  "status": "pending",
+  "hold_reason": null,
+  "flags": []
+ },
+ "request_id": "req_011CgNHCToeEZa8yPL3T2ckj",
+ "raw_response": {
+  "model": "claude-sonnet-5-5",
+  "id": "msg_011CgNHCU9ESB644cBWvMF5p",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"vendor\":\"NORTHGATE FUEL STOP\",\"date\":\"2026-10-01\",\"amount\":35.00,\"currency\":\"USD\",\"category\":\"transport\",\"line_items\":[{\"description\":\"Diesel 21.9 L\",\"amount\":35.00}],\"confidence\":0.95}"
+   }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+   "input_tokens": 737,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 93,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "standard",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "diagnostics": null
+ }
+}

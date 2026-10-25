@@ -1,0 +1,66 @@
+{
+ "n": 1,
+ "question": "food over 20 dollars last month",
+ "model": "claude-sonnet-5-5",
+ "at_utc": "2026-10-25T03:55:39.794Z",
+ "expected": {
+  "category": "food",
+  "min_amount": 20,
+  "note": "intent has no date field, so 'last month' cannot be expressed"
+ },
+ "by": "claude",
+ "intent": {
+  "status": null,
+  "vendor": null,
+  "category": "food",
+  "appeal": null,
+  "min_amount": 20,
+  "max_amount": null
+ },
+ "ag_grid_filter_model": {
+  "category": {
+   "filterType": "text",
+   "type": "contains",
+   "filter": "food"
+  },
+  "amount": {
+   "filterType": "number",
+   "type": "greaterThan",
+   "filter": 20
+  }
+ },
+ "request_id": "req_011CgNHGRNuzfg1SsYXxrg7P",
+ "raw_response": {
+  "model": "claude-sonnet-5-5",
+  "id": "msg_011CgNHGRiVtL925FrxFvXma",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"status\":null,\"vendor\":null,\"category\":\"food\",\"appeal\":null,\"min_amount\":20,\"max_amount\":null}"
+   }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+   "input_tokens": 499,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 43,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "standard",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "diagnostics": null
+ }
+}

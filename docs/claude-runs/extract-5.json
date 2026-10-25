@@ -1,0 +1,62 @@
+{
+ "n": 5,
+ "file": "data/fixtures/unreadable.png",
+ "appeal_id": 1,
+ "model": "claude-sonnet-5-5",
+ "at_utc": "2026-10-25T03:55:37.501Z",
+ "expected": {
+  "note": "not in manifest: deliberately unreadable fixture; expected outcome = HELD, never payable"
+ },
+ "by": "claude",
+ "extracted": {
+  "vendor": "Unreadable receipt",
+  "date": "2026-10-25",
+  "amount": 0,
+  "currency": "USD",
+  "category": "other",
+  "line_items": [],
+  "confidence": 0
+ },
+ "ledger": {
+  "status": "held",
+  "hold_reason": "Held: no amount could be read from this receipt ($0.00); re-upload a clearer photo · Held: receipt is hard to read (confidence 0.00, need 0.5); check it by hand",
+  "flags": [
+   "no_amount",
+   "low_confidence"
+  ]
+ },
+ "request_id": "req_011CgNHGGDWDrtRsYRQXJJV4",
+ "raw_response": {
+  "model": "claude-sonnet-5-5",
+  "id": "msg_011CgNHGGXqwvUwtAbB2uF15",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"vendor\":\"\",\"date\":\"\",\"amount\":0,\"currency\":\"\",\"category\":\"\",\"line_items\":[],\"confidence\":0}"
+   }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+   "input_tokens": 787,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 42,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "standard",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "diagnostics": null
+ }
+}

@@ -1,0 +1,65 @@
+{
+ "n": 2,
+ "question": "unpaid receipts from Fresh Mart",
+ "model": "claude-sonnet-5-5",
+ "at_utc": "2026-10-25T03:55:42.288Z",
+ "expected": {
+  "vendor": "Fresh Mart",
+  "status": "pending or held (unpaid is not one status)"
+ },
+ "by": "claude",
+ "intent": {
+  "status": null,
+  "vendor": "Fresh Mart",
+  "category": null,
+  "appeal": null,
+  "min_amount": null,
+  "max_amount": null
+ },
+ "ag_grid_filter_model": {
+  "vendor": {
+   "filterType": "text",
+   "type": "contains",
+   "filter": "Fresh Mart"
+  }
+ },
+ "request_id": "req_011CgNHGc2ranhMySr2nH8Qs",
+ "raw_response": {
+  "model": "claude-sonnet-5-5",
+  "id": "msg_011CgNHGcQSB48dKrbDFJCbw",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+   {
+    "type": "thinking",
+    "thinking": "",
+    "signature": "CAQSvwcKEAgTGAI4AUIIdGhpbmtpbmcSDGY63g/LrydIg3uFQRoMMDU/k4ExrVUQXkXUIjB2suJ7jR7MydM55VOSsBekWIgEVQMLRd5VmB/Kq4Mk7FRSGW8o7lzf15cZ6DGwb0cq3AbMP0vlf3qdN1xehRI/YlEy1UFQP2YsezIIPLOZ9OVDZiivhDhXyRIsjG+9vOmt+RMfeqjA6S2YsACslBRNuAouAB/0/VQHA7PpSIvSscIy2mCreoWrdv0vVBqwfrpkgJELWMZPs7qjwAwL9OIpx8f+TCIrM3vlvwz/fOCwp8RccuKrsf6tmiitJMobWDJNQrQvs82LkZPqLP+Avm79O/Q85yC7biKVAPteenTzzuLzmLpB4nrdXQHmsLWEiXjn1wuH98W7jbfS49O7okY8DQ0JLaP1Sa3FMICNxODrtOrf18vWbN33/3SgPD4ky0R7VCfO/Htj1dMsSOWMhprBSw0do7Q2hST9X2/qSyVIKPPsPPZu1BAF3LmZgT6cEj8YCPJ6sSLKugkIl8i4oGC5fGqBp5flkZHqw8tL4R+rgRZeR592+sPkODWBwuo1UMs9APTZHg1kjE9P2pK2Z9pzO6WyisQ5WvhooZZtWStLmHaMF3mP8GxO4+d9Huj1HHHfbKqWKxSmB3GWjPeUpYLhZ/ubK9kzHGM2pDg4zLkFc6tZgrz4epf4hR2vCeD8UhhNZADmEWrlWfqUx5V7pBIY2Ur1xaLgfe+9A0LyqlelYBdsuZ9X0BjbFUymBWmf1yEVY5EF0yP2TaEMV4Eu//65+vVOFkYlgp2JY2t1b3yYf9tjgKpe6uKHnmNvElCJyuPV5vhzdfNYlN3jU5P35dNO3rrnNf71oLMRl31+5aC5vKzM5w7cUwgr2AwUrDULAEdY7Gp6eLO1XXPsuHfzjh1ZfKKIl25BxNIpH4PMYjRrYbwsE2e7mcS6EEm65p1U+QSwMXmEsUxfe4D2Dl1sg0CxRIy1ZXrlz7fMo1OfwVh3QxcAnhjZweLynnRhFtMQmlQprx31gjKyRh4vDmYdmgE/fmrT9Q9lUtOyW+jQJYmiUJDxA0oZ4BEqYsseJ7g/A5Vvy72mxoVHblv14PR/TFvgp8obJh2GUEuuWVK9mdAihN5yjSm2WVhfB864/dHYmS0oL+on6hCbIqtxiYP/iCXHc+nKHYRZpeBiNuM1jR5C7v5TaI1v8JfNGaF/Ua7oLMO5Kh6y3ugTBRNqZ+nHfUpvtjI/VnFSV+Hb30FhNtcy19ZTzKYy7IZrDxvJSoD4txgB"
+   },
+   {
+    "type": "text",
+    "text": "{\"status\":null,\"vendor\":\"Fresh Mart\",\"category\":null,\"appeal\":null,\"min_amount\":null,\"max_amount\":null}"
+   }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+   "input_tokens": 504,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 196,
+   "output_tokens_details": {
+    "thinking_tokens": 147
+   },
+   "service_tier": "standard",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "diagnostics": null
+ }
+}

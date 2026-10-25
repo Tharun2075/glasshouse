@@ -1,0 +1,83 @@
+{
+ "n": 4,
+ "file": "data/fixtures/upload-sample.png",
+ "appeal_id": 1,
+ "model": "claude-sonnet-5-5",
+ "at_utc": "2026-10-25T03:54:47.709Z",
+ "expected": {
+  "vendor": "Corner Market Co-op",
+  "date": "2026-10-20",
+  "amount": 42.5,
+  "currency": "USD",
+  "category": "Food",
+  "line_items": [
+   {
+    "description": "Fresh vegetables",
+    "amount": 28.5
+   },
+   {
+    "description": "Bread loaves x8",
+    "amount": 14
+   }
+  ],
+  "confidence": 0.94
+ },
+ "by": "claude",
+ "extracted": {
+  "vendor": "Corner Market Co-op",
+  "date": "2026-10-20",
+  "amount": 42.5,
+  "currency": "USD",
+  "category": "food",
+  "line_items": [
+   {
+    "description": "Fresh vegetables",
+    "amount": 28.5
+   },
+   {
+    "description": "Bread loaves x8",
+    "amount": 14
+   }
+  ],
+  "confidence": 0.97
+ },
+ "ledger": {
+  "status": "pending",
+  "hold_reason": null,
+  "flags": []
+ },
+ "request_id": "req_011CgNHCajreywgApkdYeFHc",
+ "raw_response": {
+  "model": "claude-sonnet-5-5",
+  "id": "msg_011CgNHCb5xMKHqW7Ej9f7zE",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"vendor\":\"Corner Market Co-op\",\"date\":\"2026-10-20\",\"amount\":42.5,\"currency\":\"USD\",\"category\":\"food\",\"line_items\":[{\"description\":\"Fresh vegetables\",\"amount\":28.5},{\"description\":\"Bread loaves x8\",\"amount\":14.0}],\"confidence\":0.97}"
+   }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+   "input_tokens": 755,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 106,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "standard",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "diagnostics": null
+ }
+}
