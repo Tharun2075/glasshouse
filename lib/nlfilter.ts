@@ -9,8 +9,9 @@ export const Intent = z.object({
 });
 export type Intent = z.infer<typeof Intent>;
 const nullable = (t: string) => ({ type: [t, "null"] });
-const SCHEMA = { type: "object", additionalProperties: false, required: ["status", "vendor", "category", "appeal", "min_amount", "max_amount"],
-  properties: { status: { type: ["string", "null"], enum: ["pending", "held", "approved", "paid", "rejected", null] }, vendor: nullable("string"), category: nullable("string"),
+// The API rejects an enum under a type array (live 400, 2026-10-25), so status uses anyOf.
+export const SCHEMA = { type: "object", additionalProperties: false, required: ["status", "vendor", "category", "appeal", "min_amount", "max_amount"],
+  properties: { status: { anyOf: [{ type: "string", enum: ["pending", "held", "approved", "paid", "rejected"] }, { type: "null" }] }, vendor: nullable("string"), category: nullable("string"),
     appeal: nullable("string"), min_amount: nullable("number"), max_amount: nullable("number") } };
 
 export function ruleIntent(q: string): Intent {

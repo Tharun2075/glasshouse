@@ -29,19 +29,23 @@ export const JSON_SCHEMA = {
   },
 };
 
+/** What any reader returns when it cannot read a receipt: $0 and confidence 0, so addSpend always holds it. */
+export const unreadable = (): Extraction => ({ vendor: "Unreadable receipt", date: new Date().toISOString().slice(0, 10), amount: 0, currency: "USD", category: "other", line_items: [], confidence: 0 });
+
 export interface Extractor { extract(png: Buffer): Promise<ExtractResult> }
 
 export const sha256 = (b: Buffer) => createHash("sha256").update(b).digest("hex");
 
 export class MockExtractor implements Extractor {
-  constructor(private manifest: Record<string, Extraction>) {}
+  private manifest: Record<string, Extraction>;
+  constructor(manifest: Record<string, Extraction>) { this.manifest = manifest; }
   static fromDisk(dir = path.join(process.cwd(), "data", "fixtures")) {
     const f = path.join(dir, "manifest.json");
     return new MockExtractor(existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : {});
   }
   async extract(png: Buffer): Promise<ExtractResult> {
     const hit = this.manifest[sha256(png)];
-    const data = hit ?? { vendor: "Unreadable receipt (mock)", date: new Date().toISOString().slice(0, 10), amount: 0, currency: "USD", category: "uncategorised", line_items: [], confidence: 0 };
+    const data = hit ?? { ...unreadable(), vendor: "Unreadable receipt (mock)", category: "uncategorised" };
     return { data: ExtractionSchema.parse(data), by: "mock" };
   }
 }
@@ -49,7 +53,8 @@ export class MockExtractor implements Extractor {
 type MessagesClient = { messages: { create(body: any): Promise<any> } };
 
 export class ClaudeExtractor implements Extractor {
-  constructor(private client: MessagesClient) {}
+  private client: MessagesClient;
+  constructor(client: MessagesClient) { this.client = client; }
   async extract(png: Buffer): Promise<ExtractResult> {
     const msg = await this.client.messages.create({
       model: MODEL,
@@ -57,12 +62,15 @@ export class ClaudeExtractor implements Extractor {
       output_config: { format: { type: "json_schema", schema: JSON_SCHEMA } },
       messages: [{ role: "user", content: [
         { type: "image", source: { type: "base64", media_type: "image/png", data: png.toString("base64") } },
-        { type: "text", text: "Extract this charity expense receipt. amount is the receipt total. category is one of: food, supplies, transport, utilities, other. Give line_items as printed." },
+        { type: "text", text: "Extract this charity expense receipt. amount is the receipt total. category is one of: food, supplies, transport, utilities, other. Give line_items as printed. If you cannot read the receipt, leave unread fields empty, amount 0 and confidence 0." },
       ] }],
     });
     if (msg.stop_reason === "refusal") throw new Error("model refused the receipt");
     const text = (msg.content ?? []).filter((b: any) => b.type === "text").map((b: any) => b.text).join("");
-    return { data: ExtractionSchema.parse(JSON.parse(text)), by: "claude" };
+    // Live run 2026-10-25: an unreadable photo came back as vendor "" / date "" / confidence 0. Keep it as a
+    // confidence-0, $0 record so the ledger HOLDS it for a human, instead of failing the upload.
+    const parsed = ExtractionSchema.safeParse(JSON.parse(text));
+    return { data: parsed.success ? parsed.data : unreadable(), by: "claude" };
   }
 }
 

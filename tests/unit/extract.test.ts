@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { ClaudeExtractor, ExtractionSchema, JSON_SCHEMA, MODEL, MockExtractor, sha256 } from "../../lib/extract.ts";
-import { nlToFilter, ruleIntent, toFilterModel } from "../../lib/nlfilter.ts";
+import { nlToFilter, ruleIntent, toFilterModel, SCHEMA as FILTER_SCHEMA } from "../../lib/nlfilter.ts";
 
 const good = { vendor: "Corner Grocer", date: "2026-10-02", amount: 42.5, currency: "USD", category: "food", line_items: [{ description: "rice", amount: 42.5 }], confidence: 0.93 };
 const client = (text: string, stop_reason = "end_turn") => ({ messages: { create: vi.fn(async () => ({ stop_reason, content: [{ type: "text", text }] })) } });
@@ -15,8 +15,9 @@ describe("Claude extraction (mocked client)", () => {
     expect(body.output_config.format).toEqual({ type: "json_schema", schema: JSON_SCHEMA });
     expect(body.messages[0].content[0]).toMatchObject({ type: "image", source: { media_type: "image/png" } });
   });
-  it("rejects output that breaks the schema, and refusals", async () => {
-    await expect(new ClaudeExtractor(client(JSON.stringify({ ...good, date: "2 Oct" }))).extract(Buffer.from("x"))).rejects.toThrow();
+  it("holds output that breaks the schema as unreadable, and rejects refusals", async () => {
+    const bad = await new ClaudeExtractor(client(JSON.stringify({ ...good, vendor: "", date: "" }))).extract(Buffer.from("x"));
+    expect(bad).toMatchObject({ by: "claude", data: { amount: 0, confidence: 0 } }); // held by addSpend, never payable
     await expect(new ClaudeExtractor(client("", "refusal")).extract(Buffer.from("x"))).rejects.toThrow(/refused/);
   });
   it("JSON schema and zod schema list the same fields", () => {
@@ -39,5 +40,11 @@ describe("NL -> AG Grid filter", () => {
     const c = client(JSON.stringify(ruleIntent("held spends")));
     const r = await nlToFilter("held spends", c);
     expect(r.by).toBe("claude");
+  });
+});
+
+describe("filter JSON schema", () => {
+  it("never puts an enum under a type array (the live API answers 400)", () => {
+    for (const [k, v] of Object.entries(FILTER_SCHEMA.properties) as [string, any][]) expect(Array.isArray(v.type) && "enum" in v, k).toBe(false);
   });
 });
