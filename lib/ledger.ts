@@ -151,10 +151,12 @@ export async function captureDonation(orderId: string, capture = pp.captureOrder
 export function trace(donationId: number) {
   const d = one<Donation>("SELECT * FROM donations WHERE id=? AND status='COMPLETED'", donationId);
   if (!d) return null;
-  const sp = spends();
+  const sp = spends(), po = payouts();
   const rows = traceDonation(d, donations() as Don[], fundedSpends()).map((r) => {
     const s = r.spend_id ? sp.find((x) => x.id === r.spend_id) : undefined;
-    return { ...r, vendor: s?.vendor ?? null, date: s?.date ?? null, status: s?.status ?? null, receipt: s ? `/api/receipts/${s.id}` : null };
+    const p = s ? po.find((x) => x.spend_id === s.id) : undefined;
+    return { ...r, vendor: s?.vendor ?? null, date: s?.date ?? null, status: s?.status ?? null, receipt: s ? `/api/receipts/${s.id}` : null,
+      payout_batch: p?.batch_id ?? null, payout_status: p?.status ?? null };
   });
   const appeal = one<Appeal>("SELECT * FROM appeals WHERE id=?", d.appeal_id)!;
   const donation = { id: d.id, appeal_id: d.appeal_id, donor_name: d.donor_name, amount_cents: d.amount_cents, source: d.source, created_at: d.created_at };
