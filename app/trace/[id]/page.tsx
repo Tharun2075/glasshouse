@@ -9,7 +9,7 @@ export default async function Trace({ params }: { params: Promise<{ id: string }
   return (<>
     <h1>Where did your ${fmt(t.donation.amount_cents)} go?</h1>
     <p className="lede">Donation #{t.donation.id} from {t.donation.donor_name} to <strong>{t.appeal.title}</strong>. Gifts are spent oldest-first, so each dollar is matched to the receipts below.</p>
-    <div className="cta-row" style={{ marginTop: 0 }}><CopyLink /><span className="muted">Anyone with this link sees the same receipts. No login needed.</span></div>
+    <div className="cta-row" style={{ marginTop: 0, alignItems: "center" }}><CopyLink /><span className="muted">Anyone with this link sees the same receipts. No login needed.</span></div>
     {t.rows.map((r, i) => (
       <div className="trace-row" key={i}>
         {r.receipt ? <a href={r.receipt}><img src={r.receipt} alt={`Receipt from ${r.vendor}, ${r.date}`} width={240} height={320} /></a> : <div className="muted">No receipt yet</div>}
