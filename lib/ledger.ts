@@ -56,15 +56,22 @@ export async function requestPayout(spendId: number, receiver = process.env.PAYP
   const gate = payoutGate(spend, approvals);
   if (!gate.ok) return { status: gate.status, body: { error: gate.error } };
   const existing = one<Payout>("SELECT * FROM payouts WHERE spend_id=?", spendId);
-  // A payout that failed before PayPal gave us a batch id can be retried; anything else is a replay.
-  if (existing && !(existing.status.startsWith("ERROR") && !existing.batch_id)) return { status: 200, body: { payout: existing, replay: true } };
-  if (existing) run("DELETE FROM payouts WHERE spend_id=? AND batch_id IS NULL AND status LIKE 'ERROR%'", spendId);
-  // PayPal rejects a reused sender_batch_id for 30 days, so it gets a random part (a reseeded demo DB
+  // A payout that errored with no PayPal batch id may be retried, but with the SAME sender_batch_id:
+  // if the first call did reach PayPal, PayPal refuses the reused id instead of paying twice.
+  const retry = existing && existing.status.startsWith("ERROR") && !existing.batch_id;
+  if (existing && !retry) return { status: 200, body: { payout: existing, replay: true } };
+  // PayPal rejects a reused sender_batch_id for 30 days, so a new one gets a random part (a reseeded demo DB
   // restarts spend ids at 1). Idempotency comes from the UNIQUE payouts.spend_id row, not from this id.
-  const sbid = `gh-spend-${spendId}-${randomUUID().slice(0, 8)}`;
+  const sbid = retry ? existing.sender_batch_id : `gh-spend-${spendId}-${randomUUID().slice(0, 8)}`;
   const t = now();
-  try { run("INSERT INTO payouts(spend_id,sender_batch_id,status,created_at,updated_at) VALUES(?,?,?,?,?)", spendId, sbid, "CREATING", t, t); }
-  catch { return { status: 200, body: { payout: one<Payout>("SELECT * FROM payouts WHERE spend_id=?", spendId), replay: true } }; }
+  if (retry) {
+    // compare-and-set so two concurrent retries cannot both send
+    if (Number(run("UPDATE payouts SET status='CREATING', updated_at=? WHERE spend_id=? AND batch_id IS NULL AND status LIKE 'ERROR%'", t, spendId).changes) !== 1)
+      return { status: 200, body: { payout: one<Payout>("SELECT * FROM payouts WHERE spend_id=?", spendId), replay: true } };
+  } else {
+    try { run("INSERT INTO payouts(spend_id,sender_batch_id,status,created_at,updated_at) VALUES(?,?,?,?,?)", spendId, sbid, "CREATING", t, t); }
+    catch { return { status: 200, body: { payout: one<Payout>("SELECT * FROM payouts WHERE spend_id=?", spendId), replay: true } }; }
+  }
   try {
     const res = await createPayout(sbid, receiver, spend!.amount_cents, `Glasshouse spend #${spendId}: ${spend!.vendor}`);
     run("UPDATE payouts SET batch_id=?, status=?, updated_at=? WHERE spend_id=?", res.batchId, res.status, now(), spendId);

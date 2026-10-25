@@ -114,9 +114,11 @@ describe("funds, anomaly baseline and payout retry (D5, D12, D11)", () => {
     const bad = vi.fn(async () => { throw new Error("network down"); });
     await approveSpend(s.id, 1, bad);
     expect(one<{ status: string }>("SELECT status FROM payouts WHERE spend_id=?", s.id)!.status).toMatch(/^ERROR/);
-    const good = vi.fn(async () => ({ batchId: "BR", status: "PENDING", http: 201, body: {}, debugId: null }));
+    const sbid = one<{ sender_batch_id: string }>("SELECT sender_batch_id FROM payouts WHERE spend_id=?", s.id)!.sender_batch_id;
+    const good = vi.fn(async (id: string) => ({ batchId: "BR", status: "PENDING", http: 201, body: {}, debugId: null, id }));
     expect((await requestPayout(s.id, "r@x.test", good)).status).toBe(201);
     expect((await requestPayout(s.id, "r@x.test", good)).body.replay).toBe(true);
-    expect(good).toHaveBeenCalledTimes(1); expect(all("SELECT * FROM payouts WHERE spend_id=?", s.id)).toHaveLength(1);
+    expect(good).toHaveBeenCalledTimes(1); expect(good.mock.calls[0][0]).toBe(sbid); // same id -> PayPal dedupes
+    expect(all("SELECT * FROM payouts WHERE spend_id=?", s.id)).toHaveLength(1);
   });
 });
