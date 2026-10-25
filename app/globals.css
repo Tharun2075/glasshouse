@@ -231,10 +231,10 @@ td.reader { display: table-cell; }
 /* ---- ledger grid (behaviour lives in LedgerGrid.tsx; only its look changes here) ---- */
 .gridwrap { width: 100%; border-top: var(--hair); }
 .gridwrap .ag-root-wrapper { border: 0; border-radius: 0; background: var(--bg-0); }
-.gridwrap .ag-header { background: var(--bg-0); border-bottom: var(--hair); }
+.gridwrap .ag-header { background: var(--bg-0); border-bottom: 0; }
 .gridwrap .ag-header-cell-text { font-family: var(--font-mono); font-size: .75rem; font-weight: 400; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); }
-.gridwrap .ag-body-viewport, .gridwrap .ag-center-cols-viewport, .gridwrap .ag-center-cols-container { background: var(--bg-0); }
-.gridwrap .ag-row { background: var(--bg-0); border-bottom: var(--hair); }
+.gridwrap .ag-grid-scrolling-rows, .gridwrap .ag-body-viewport, .gridwrap .ag-center-cols-viewport, .gridwrap .ag-center-cols-container { background: var(--bg-0); }
+.gridwrap .ag-row { background: var(--bg-0); border-width: 0; border-top: var(--hair); }
 .gridwrap .ag-row-odd { background: var(--bg-0); }
 .gridwrap .ag-row-hover::before, .gridwrap .ag-row:hover { background: var(--grid-hover); }
 .gridwrap .ag-cell { font-variant-numeric: tabular-nums; }
@@ -308,7 +308,11 @@ pre.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
 .login .hero { grid-template-columns: minmax(0, 1fr); text-align: center; justify-items: center; }
 .login .hero h1, .login .lede { margin-inline: auto; }
 .login .split { grid-template-columns: minmax(0, 1fr); }
-@media (min-width: 901px) { .login { max-width: 60rem; } .login .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+@media (min-width: 901px) {
+  .login { max-width: 60rem; }
+  .login .split { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
+  .login .split > .panel:first-child { display: flex; flex-direction: column; justify-content: center; }
+}
 @view-transition { navigation: auto; }
 
 /* ---- responsive ---- */
