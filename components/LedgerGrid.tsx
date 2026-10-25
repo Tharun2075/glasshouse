@@ -65,7 +65,8 @@ export default function LedgerGrid({ data }: { data: Data }) {
     { field: "status" as any, headerName: "Status", width: 120, filter: "agTextColumnFilter", cellRenderer: (p: any) => p.value ? <span className={`pill ${p.value}`}>{p.value}</span> : null },
     { field: "reason" as any, headerName: "Why held / flags", flex: 1, minWidth: 180, tooltipField: "reason" as any },
     { field: "payout" as any, headerName: "Payout batch", flex: 1, minWidth: 160, tooltipField: "payout" as any },
-    { field: "receipt" as any, headerName: "Receipt", flex: 1, minWidth: 120, sortable: false, filter: false, cellRenderer: (p: any) => p.value ? <a href={p.value} target="_blank" rel="noreferrer">View receipt</a> : null },
+    { field: "receipt" as any, headerName: "Receipt", flex: 1, minWidth: 120, sortable: false, filter: false, cellRenderer: (p: any) => !p.value ? null
+      : p.data.status === "approved" || p.data.status === "paid" ? <a href={p.value} target="_blank" rel="noreferrer">View receipt</a> : <span className="muted">After review</span> },
   ], []);
 
   const spendsOnly = rows.filter((r): r is Extract<Row, { kind: "spend" }> => r.kind === "spend");
