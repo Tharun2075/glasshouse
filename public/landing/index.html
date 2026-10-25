@@ -17,12 +17,13 @@
     <link rel="apple-touch-icon" href="/landing/apple-touch-icon.png" />
     <link rel="preload" as="image" href="/landing/img/poster.avif" type="image/avif" imagesrcset="/landing/img/poster-1200.avif 1200w, /landing/img/poster.avif 2400w" imagesizes="(min-width: 1024px) 50vw, 100vw" fetchpriority="high" />
     <script>document.documentElement.classList.add('js')</script>
-    <script type="module" crossorigin src="/landing/assets/index-tYrLQ6QI.js"></script>
+    <script type="module" crossorigin src="/landing/assets/index-CTrBF4U7.js"></script>
     <link rel="modulepreload" crossorigin href="/landing/assets/motion-BmD6kqmK.js">
     <link rel="modulepreload" crossorigin href="/landing/assets/hero-box-5_ApHAQ5.js">
     <link rel="modulepreload" crossorigin href="/landing/assets/preload-helper-UEEqG8GQ.js">
     <link rel="stylesheet" crossorigin href="/landing/assets/motion-fOJvfYOR.css">
-    <link rel="stylesheet" crossorigin href="/landing/assets/index-kdS-pE5x.css">
+    <link rel="stylesheet" crossorigin href="/landing/assets/index-D1XYbIFf.css">
+    <link rel="preload" href="/landing/assets/inter-latin-wght-italic-DpCbqKDY.woff2" as="font" type="font/woff2" crossorigin="">
     <link rel="preload" href="/landing/assets/inter-latin-wght-normal-Dx4kXJAl.woff2" as="font" type="font/woff2" crossorigin="">
   </head>
   <body>
@@ -153,5 +154,7 @@
   </nav>
   <p class="site-footer__legal mono">MIT licensed. Sandbox demo: no real money, no real charity.</p>
 </div></footer>
+    <!-- first paint: box the poster exactly as placePoster() (src/core/hero-box.ts) does, before it ever paints, so it never jumps (CLS) -->
+    <script>(function(){var p=document.querySelector('.poster'),m=document.querySelector('[data-hero-media]'),c=document.querySelector('.hero__copy');if(!p||!m)return;var w=innerWidth,h=innerHeight,r=m.getBoundingClientRect(),k=c&&c.getBoundingClientRect();if(r.width<=10||r.height<=10)return;var pad=Math.min(48,Math.max(16,w*0.025)),top=r.top+scrollY,l=r.left+pad,rt=Math.min(w,r.right)-pad,b=Math.min(top+r.height,h)-pad;if(k&&k.right<=r.left+1)l=Math.max(l,k.right+32);p.classList.add('poster--boxed');p.style.cssText='left:'+l+'px;top:'+(top+pad-scrollY)+'px;width:'+(rt-l)+'px;height:'+(b-top-pad)+'px'})()</script>
   </body>
 </html>
