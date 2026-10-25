@@ -30,18 +30,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   if (u?.role === "trustee") links.push({ href: "/trustee", label: "Approvals", short: "Approve" });
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
-      <head><script dangerouslySetInnerHTML={{ __html: THEME_JS }} /></head>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_JS }} />
+        <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="" />
+      </head>
       <body>
         <a className="skip" href="#main">Skip to content</a>
-        <header className="top">
+        <header className="site-header"><div className="wrap site-header__inner">
           <a className="brand" href="/" aria-label="Glasshouse home"><img src="/brand/logo-mark.svg" alt="" width={28} height={28} /><span className="word">Glasshouse</span></a>
           <NavLinks links={links} />
           <div className="who">
-            {u ? (<><span>{u.name} ({u.role})</span><form action="/api/auth/logout" method="post"><button className="ghost" type="submit">Sign out</button></form></>)
-               : <a href="/login">Sign in</a>}
+            {u ? (<><span className="mono">{u.name} · {u.role}</span><form action="/api/auth/logout" method="post"><button className="btn btn--ghost btn--sm" type="submit">Sign out</button></form></>)
+               : <a className="btn btn--ghost btn--sm" href="/login">Sign in</a>}
             <ThemeToggle />
           </div>
-        </header>
+        </div></header>
         <main id="main">{children}</main>
         <Footer />
       </body>
