@@ -92,7 +92,7 @@ main a:not(.btn):not(.brand):hover { text-decoration-color: var(--accent); }
 .card { border-top: var(--hair); padding: var(--space-4) 0 0; }
 .panel { border: var(--hair); border-radius: var(--radius-m); padding: var(--space-5); max-width: 520px; }
 .panel.result { margin-top: var(--space-4); max-width: none; }
-.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-6); align-items: start; }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-6); align-items: stretch; }
 .split > .panel { max-width: none; }
 
 /* ---- hero (ledger, trace) ---- */
@@ -307,6 +307,7 @@ pre.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
 .login .hero { grid-template-columns: minmax(0, 1fr); text-align: center; justify-items: center; }
 .login .hero h1, .login .lede { margin-inline: auto; }
 .login .split { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 901px) { .login { max-width: 60rem; } .login .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 @view-transition { navigation: auto; }
 
 /* ---- responsive ---- */
