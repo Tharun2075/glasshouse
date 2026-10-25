@@ -17,7 +17,7 @@ export default async function Trace({ params }: { params: Promise<{ id: string }
           <div className="big mono">${fmt(r.cents)}</div>
           <div>{r.vendor ? <>{r.vendor} · {r.date} · <span className={`pill ${r.status}`}>{r.status}</span></> : "Not yet spent — held for this appeal"}</div>
           {r.status === "paid" && r.payout_status === "IMPORTED" && <p className="muted">Paid outside Glasshouse before go-live; the receipt is the proof.</p>}
-          {r.status === "paid" && r.payout_batch && <p className="muted">paid = PayPal payout batch <span className="mono">{r.payout_batch}</span> succeeded.</p>}
+          {r.status === "paid" && r.payout_status === "SUCCESS" && r.payout_batch && <p className="muted">paid = PayPal payout batch <span className="mono">{r.payout_batch}</span> succeeded.</p>}
           {r.status === "approved" && <p className="muted">approved = a trustee checked this receipt; the PayPal payout is on its way.</p>}
         </div>
       </div>))}
