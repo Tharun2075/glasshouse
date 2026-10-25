@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS orgs(id INTEGER PRIMARY KEY, name TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, email TEXT UNIQUE NOT NULL, name TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('donor','volunteer','trustee')), pw TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS appeals(id INTEGER PRIMARY KEY, org_id INTEGER NOT NULL, title TEXT NOT NULL, goal_cents INTEGER NOT NULL, item_cap_cents INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS donations(id INTEGER PRIMARY KEY, appeal_id INTEGER NOT NULL, donor_id INTEGER, donor_name TEXT NOT NULL, amount_cents INTEGER NOT NULL, currency TEXT NOT NULL DEFAULT 'USD',
-  order_id TEXT UNIQUE NOT NULL, capture_id TEXT, status TEXT NOT NULL, source TEXT NOT NULL DEFAULT 'paypal-sandbox', created_at TEXT NOT NULL, captured_at TEXT);
+  order_id TEXT UNIQUE NOT NULL, capture_id TEXT, status TEXT NOT NULL, source TEXT NOT NULL DEFAULT 'paypal-sandbox', created_at TEXT NOT NULL, captured_at TEXT, captured_value TEXT);
 CREATE TABLE IF NOT EXISTS spends(id INTEGER PRIMARY KEY, appeal_id INTEGER NOT NULL, vendor TEXT NOT NULL, date TEXT NOT NULL, amount_cents INTEGER NOT NULL, currency TEXT NOT NULL,
   category TEXT NOT NULL, line_items TEXT NOT NULL, confidence REAL NOT NULL, extracted_by TEXT NOT NULL, receipt_file TEXT NOT NULL, receipt_hash TEXT NOT NULL,
   status TEXT NOT NULL CHECK(status IN ('pending','held','approved','paid','rejected')), hold_reason TEXT, flags TEXT NOT NULL DEFAULT '[]', created_by INTEGER, created_at TEXT NOT NULL);

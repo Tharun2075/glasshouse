@@ -11,7 +11,7 @@ import * as pp from "./paypal.ts";
 export type Appeal = { id: number; title: string; goal_cents: number; item_cap_cents: number };
 export type Spend = { id: number; appeal_id: number; vendor: string; date: string; amount_cents: number; currency: string; category: string; line_items: string;
   confidence: number; extracted_by: string; receipt_file: string; receipt_hash: string; status: string; hold_reason: string | null; flags: string; created_at: string };
-export type Donation = { id: number; appeal_id: number; donor_id: number | null; donor_name: string; amount_cents: number; order_id: string; capture_id: string | null; status: string; source: string; created_at: string };
+export type Donation = { id: number; appeal_id: number; donor_id: number | null; donor_name: string; amount_cents: number; order_id: string; capture_id: string | null; captured_value?: string | null; status: string; source: string; created_at: string };
 export type Payout = { id: number; spend_id: number; sender_batch_id: string; batch_id: string | null; status: string; item_status: string | null; http: number | null; created_at: string; updated_at: string };
 
 export const appeals = () => all<Appeal>("SELECT id,title,goal_cents,item_cap_cents FROM appeals ORDER BY id");
@@ -35,7 +35,7 @@ export function addSpend(appealId: number, ext: Extraction, by: string, file: st
   const sameFacts = one<{ id: number }>("SELECT id FROM spends WHERE lower(vendor)=lower(?) AND date=? AND amount_cents=?", ext.vendor, ext.date, cents);
   if (sameHash || sameFacts) { flags.push("duplicate"); reasons.push(`Held: looks like a duplicate of spend #${(sameHash ?? sameFacts)!.id}`); }
   if (cents > appeal.item_cap_cents) { flags.push("over_cap"); reasons.push(`Held: $${fmt(cents)} is over the $${fmt(appeal.item_cap_cents)} per-item cap for this appeal`); }
-  const prior = all<{ amount_cents: number }>("SELECT amount_cents FROM spends WHERE appeal_id=? AND status IN ('approved','paid','pending') ORDER BY created_at,id", appealId).map((r) => r.amount_cents);
+  const prior = all<{ amount_cents: number }>("SELECT amount_cents FROM spends WHERE appeal_id=? AND status IN ('approved','paid') ORDER BY created_at,id", appealId).map((r) => r.amount_cents);
   const a = checkAnomaly(cents, prior);
   if (a.held) { flags.push("anomaly"); reasons.push(a.reason!); }
   // A receipt we cannot read is never payable: hold it with the reason instead of passing it to a trustee as "pending".
@@ -56,7 +56,9 @@ export async function requestPayout(spendId: number, receiver = process.env.PAYP
   const gate = payoutGate(spend, approvals);
   if (!gate.ok) return { status: gate.status, body: { error: gate.error } };
   const existing = one<Payout>("SELECT * FROM payouts WHERE spend_id=?", spendId);
-  if (existing) return { status: 200, body: { payout: existing, replay: true } };
+  // A payout that failed before PayPal gave us a batch id can be retried; anything else is a replay.
+  if (existing && !(existing.status.startsWith("ERROR") && !existing.batch_id)) return { status: 200, body: { payout: existing, replay: true } };
+  if (existing) run("DELETE FROM payouts WHERE spend_id=? AND batch_id IS NULL AND status LIKE 'ERROR%'", spendId);
   // PayPal rejects a reused sender_batch_id for 30 days, so it gets a random part (a reseeded demo DB
   // restarts spend ids at 1). Idempotency comes from the UNIQUE payouts.spend_id row, not from this id.
   const sbid = `gh-spend-${spendId}-${randomUUID().slice(0, 8)}`;
@@ -80,12 +82,25 @@ export async function approveSpend(spendId: number, trusteeId: number, createPay
   if (spend.status === "pending") {
     db().exec("BEGIN IMMEDIATE");
     try {
+      // Trustees can never approve more than the appeal has actually raised.
+      const avail = available(spend.appeal_id);
+      if (spend.amount_cents > avail) {
+        db().exec("ROLLBACK");
+        return { status: 409, body: { error: `not enough raised: $${fmt(spend.amount_cents)} needed, $${fmt(Math.max(avail, 0))} available for this appeal` } };
+      }
       run("INSERT OR IGNORE INTO approvals(spend_id,trustee_id,created_at) VALUES(?,?,?)", spendId, trusteeId, now());
       run("UPDATE spends SET status='approved' WHERE id=? AND status='pending'", spendId);
       db().exec("COMMIT");
     } catch (e) { db().exec("ROLLBACK"); throw e; }
   }
   return requestPayout(spendId, undefined, createPayout);
+}
+
+/** Money an appeal can still spend: completed donations minus approved/paid spends. */
+export function available(appealId: number) {
+  const raised = one<{ c: number }>("SELECT coalesce(sum(amount_cents),0) c FROM donations WHERE appeal_id=? AND status='COMPLETED'", appealId)!.c;
+  const spent = one<{ c: number }>("SELECT coalesce(sum(amount_cents),0) c FROM spends WHERE appeal_id=? AND status IN ('approved','paid')", appealId)!.c;
+  return raised - spent;
 }
 
 export async function pollPayout(spendId: number, getPayout = pp.getPayout) {
@@ -112,11 +127,15 @@ export async function captureDonation(orderId: string, capture = pp.captureOrder
   const d = one<Donation>("SELECT * FROM donations WHERE order_id=?", orderId);
   if (!d) return { status: 404, body: { error: "unknown order" } };
   if (d.status === "COMPLETED") return { status: 200, body: { donation: d, replay: true } };
+  if (d.status === "MISMATCH") return { status: 409, body: { error: `already captured ${d.captured_value} but it does not match ${fmt(d.amount_cents)} USD; a trustee must reconcile it`, donation: d } };
   const c = await capture(orderId, `cap-${orderId}`);
   if (c.status !== "COMPLETED") return { status: 502, body: { error: `capture status ${c.status}` } };
   const got = c.captured;
-  if (!got || got.currency_code !== "USD" || toCents(got.value) !== d.amount_cents)
+  if (!got || got.currency_code !== "USD" || toCents(got.value) !== d.amount_cents) {
+    // Money moved at PayPal: record it as MISMATCH so trustees see it, never leave it as an invisible CREATED row.
+    run("UPDATE donations SET status='MISMATCH', capture_id=?, captured_value=?, captured_at=? WHERE order_id=?", c.captureId, `${got?.value} ${got?.currency_code}`, now(), orderId);
     return { status: 409, body: { error: `captured ${got?.value} ${got?.currency_code} does not match item total ${fmt(d.amount_cents)} USD` } };
+  }
   run("UPDATE donations SET status='COMPLETED', capture_id=?, captured_at=? WHERE order_id=? AND status<>'COMPLETED'", c.captureId, now(), orderId);
   return { status: 201, body: { donation: one<Donation>("SELECT * FROM donations WHERE order_id=?", orderId) } };
 }
@@ -131,7 +150,8 @@ export function trace(donationId: number) {
     return { ...r, vendor: s?.vendor ?? null, date: s?.date ?? null, status: s?.status ?? null, receipt: s ? `/api/receipts/${s.id}` : null };
   });
   const appeal = one<Appeal>("SELECT * FROM appeals WHERE id=?", d.appeal_id)!;
-  return { donation: d, appeal, rows, total_cents: rows.reduce((a, r) => a + r.cents, 0) };
+  const donation = { id: d.id, appeal_id: d.appeal_id, donor_name: d.donor_name, amount_cents: d.amount_cents, source: d.source, created_at: d.created_at };
+  return { donation, appeal, rows, total_cents: rows.reduce((a, r) => a + r.cents, 0) };
 }
 
 export function ledger() {
@@ -145,4 +165,9 @@ export function ledger() {
       funded_by: alloc.filter((x) => x.spend_id === s.id).length, payout: po.find((p) => p.spend_id === s.id) ?? null })),
     donations: dn.map((d) => ({ id: d.id, appeal_id: d.appeal_id, donor_name: d.donor_name, amount_cents: d.amount_cents, source: d.source, created_at: d.created_at })),
   };
+}
+
+/** Trustee-only: captured donations whose amount did not match the order. */
+export function mismatches() {
+  return all<Donation>("SELECT * FROM donations WHERE status='MISMATCH' ORDER BY id");
 }
