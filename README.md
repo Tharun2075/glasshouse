@@ -11,7 +11,11 @@ Spends that look like duplicates, go over an appeal's per-item cap, or run above
 **Live Claude results (2026-10-25, `claude-sonnet-5-5`, real API calls), run 2:** on 4 readable receipts, **24 of 24 fields** matched: vendor, date, amount, currency, category and line items. A deliberately blurred receipt came back at $0 with confidence 0 and was **held**, never payable. The plain-English filter got **5 of 5 questions fully right**, including "last month", "since 1 Oct", "unpaid" (pending, held or approved) and appeal names such as "kitchen equipment". Run 1 that morning scored 21/24 and 0/3 full, which led to a shared category list and to date, status and appeal fields in the filter. Run 1 also caught two bugs that mocked tests had missed (a filter schema the API rejected with HTTP 400, and an unreadable receipt that errored instead of being held); both are fixed. Both runs, with request ids: [docs/claude-runs/README.md](docs/claude-runs/README.md).
 
 - Demo video: _(placeholder — link added after recording)_
-- Hosted demo: _(placeholder — sandbox URL added after deploy)_
+- Hosted demo: **https://glasshouse-1a5k.onrender.com** (PayPal sandbox, live Claude receipt reader)
+  - First load may take ~1 min: the free plan sleeps when idle.
+  - Demo data resets on every restart, so uploads, donations and approvals from earlier visits disappear.
+  - Judge logins are the demo logins below (sandbox only, no real money). To pay, use any PayPal **sandbox** personal account (developer.paypal.com, Sandbox accounts).
+  - Each visitor gets 15 Claude reads a day (40 per demo login, 1000 overall). Past that, the demo reader answers and the page says "AI limit reached for today, demo reader used".
 
 ## Judge walkthrough (about 5 minutes)
 
