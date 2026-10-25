@@ -8,6 +8,8 @@ Spends that look like duplicates, go over an appeal's per-item cap, or run above
 
 **Who reads the receipts.** With `ANTHROPIC_API_KEY` set, Claude (vision, JSON schema) reads each receipt. Without a key, a deterministic demo reader answers from `data/fixtures/manifest.json` by image hash, and every row says "Demo reader (no AI key)". The screenshots below were taken without a key.
 
+**Live Claude results (2026-10-25, `claude-sonnet-5-5`, real API calls):** on 4 readable receipts, 21 of 24 fields matched. Every date, amount, currency and line item was right. The 3 mismatches: Claude used the app's own categories (`supplies`, `transport`) where the fixtures say `Equipment` and `Fuel`, and it copied one vendor name in capitals. A deliberately blurred receipt came back at $0 with confidence 0 and was **held**, never payable. The plain-English filter got all 3 test questions partly right. It cannot express "last month" or "unpaid", and it put "kitchen equipment" into category instead of appeal. The live run also caught two bugs that mocked tests had missed: the filter schema was rejected with HTTP 400, and an unreadable receipt got an error instead of being held. Both are fixed. Full table with request ids: [docs/claude-runs/README.md](docs/claude-runs/README.md).
+
 - Demo video: _(placeholder — link added after recording)_
 - Hosted demo: _(placeholder — sandbox URL added after deploy)_
 
