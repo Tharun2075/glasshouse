@@ -23,6 +23,8 @@ export const payouts = () => all<Payout>("SELECT * FROM payouts ORDER BY id");
 const fundedSpends = (): Sp[] => all<Sp>("SELECT id,appeal_id,amount_cents,created_at FROM spends WHERE status IN ('approved','paid') ORDER BY created_at,id");
 
 // ---------- receipts -> spends (never paid here) ----------
+/** Extractions below this confidence are held, never offered for approval. */
+export const MIN_CONFIDENCE = 0.5;
 export function addSpend(appealId: number, ext: Extraction, by: string, file: string, hash: string, userId: number | null, createdAt = now()) {
   const appeal = one<Appeal>("SELECT * FROM appeals WHERE id=?", appealId);
   if (!appeal) throw new Error("unknown appeal");
@@ -36,7 +38,9 @@ export function addSpend(appealId: number, ext: Extraction, by: string, file: st
   const prior = all<{ amount_cents: number }>("SELECT amount_cents FROM spends WHERE appeal_id=? AND status IN ('approved','paid','pending') ORDER BY created_at,id", appealId).map((r) => r.amount_cents);
   const a = checkAnomaly(cents, prior);
   if (a.held) { flags.push("anomaly"); reasons.push(a.reason!); }
-  if (ext.confidence < 0.5) flags.push("low_confidence");
+  // A receipt we cannot read is never payable: hold it with the reason instead of passing it to a trustee as "pending".
+  if (cents <= 0) { flags.push("no_amount"); reasons.push("Held: no amount could be read from this receipt ($0.00); re-upload a clearer photo"); }
+  if (ext.confidence < MIN_CONFIDENCE) { flags.push("low_confidence"); reasons.push(`Held: receipt is hard to read (confidence ${ext.confidence.toFixed(2)}, need ${MIN_CONFIDENCE}); check it by hand`); }
   const status = reasons.length ? "held" : "pending"; // NOTHING is auto-paid: best case is 'pending' trustee review
   const r = run(`INSERT INTO spends(appeal_id,vendor,date,amount_cents,currency,category,line_items,confidence,extracted_by,receipt_file,receipt_hash,status,hold_reason,flags,created_by,created_at)
     VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, appealId, ext.vendor, ext.date, cents, ext.currency, ext.category, JSON.stringify(ext.line_items), ext.confidence, by, file, hash, status, reasons.join(" · ") || null, JSON.stringify(flags), userId, createdAt);
@@ -72,6 +76,7 @@ export async function approveSpend(spendId: number, trusteeId: number, createPay
   const spend = one<Spend>("SELECT * FROM spends WHERE id=?", spendId);
   if (!spend) return { status: 404, body: { error: "unknown spend" } };
   if (spend.status === "held") return { status: 403, body: { error: "held spends cannot be approved: " + spend.hold_reason } };
+  if (spend.amount_cents <= 0) return { status: 422, body: { error: "spend has no readable amount ($0.00); it cannot be approved" } };
   if (spend.status === "pending") {
     db().exec("BEGIN IMMEDIATE");
     try {

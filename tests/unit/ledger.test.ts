@@ -20,6 +20,25 @@ describe("upload never auto-pays (T6) + flags", () => {
   it("anomaly is held with reason", () => { add("E", 50); const s = add("F", 290); expect(s.hold_reason).toMatch(/rolling mean/); });
 });
 
+describe("unreadable receipts are held (D1)", () => {
+  it("$0 extraction is held with a reason and cannot be approved or paid", async () => {
+    const s = add("Unreadable receipt (mock)", 0);
+    expect(s.status).toBe("held"); expect(s.hold_reason).toMatch(/no amount/); expect(JSON.parse(s.flags)).toContain("no_amount");
+    const cp = vi.fn();
+    expect((await approveSpend(s.id, 1, cp)).status).toBe(403);
+    expect((await requestPayout(s.id, "r@x.test", cp)).status).toBe(403);
+    expect(cp).not.toHaveBeenCalled();
+  });
+  it("low confidence is held with the confidence in the reason", () => {
+    const s = addSpend(1, { ...ext("Blurry Mart", 20, "2026-09-01"), confidence: 0.3 }, "mock", "f.png", "lowconf", null);
+    expect(s.status).toBe("held"); expect(s.hold_reason).toMatch(/hard to read \(confidence 0\.30/);
+  });
+  it("a $0 spend forced to pending still gets 422 on approve", async () => {
+    const s = add("Zero forced", 0); run("UPDATE spends SET status='pending' WHERE id=?", s.id); const cp = vi.fn();
+    expect((await approveSpend(s.id, 1, cp)).status).toBe(422); expect(cp).not.toHaveBeenCalled();
+  });
+});
+
 describe("payout gate + exactly one batch", () => {
   it("T7: payout without approval -> 403 and createPayout never called", async () => {
     const s = add("Gate shop", 40); const cp = vi.fn();
