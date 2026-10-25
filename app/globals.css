@@ -58,3 +58,5 @@ table.plain { border-collapse: collapse; width: 100%; background: var(--surface)
 .trace-form { display: flex; gap: 8px; align-items: end; flex-wrap: wrap; }
 .trace-form label { width: 100%; }
 @media (max-width: 640px) { .cta-row .btn { width: 100%; text-align: center; min-height: 44px; } .trace-form input { flex: 1; } }
+.vendor-cell { line-height: 1.4; padding: 10px 0; white-space: normal; } .vendor-cell .why { display: none; }
+@media (max-width: 640px) { .vendor-cell .why { display: block; font-size: 13px; font-weight: 600; color: var(--held); } }

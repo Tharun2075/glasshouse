@@ -56,18 +56,20 @@ export default function LedgerGrid({ data }: { data: Data }) {
   const cols = useMemo<ColDef<Row>[]>(() => [
     { field: "id" as any, headerName: "#", width: 70, filter: "agNumberColumnFilter" },
     { field: "date" as any, headerName: "Date", width: 120, filter: "agDateColumnFilter", sort: undefined },
-    { field: "vendor" as any, headerName: "Vendor", flex: 1, minWidth: 120, filter: "agTextColumnFilter" },
-    { field: "category" as any, headerName: "Category", width: 140, filter: "agTextColumnFilter" },
+    // Phones hide the "Why held" column, so a held row repeats its reason under the vendor (CSS shows .why only below 640px).
+    { field: "vendor" as any, headerName: "Vendor", flex: 1, minWidth: 120, filter: "agTextColumnFilter", autoHeight: true,
+      cellRenderer: (p: any) => (<div className="vendor-cell">{p.value}{p.data?.status === "held" && p.data.reason && <span className="why">{p.data.reason}</span>}</div>) },
+    { field: "category" as any, headerName: "Category", width: 120, filter: "agTextColumnFilter" },
     { field: "amount" as any, headerName: "Amount", width: 130, filter: "agNumberColumnFilter", type: "rightAligned", valueFormatter: (p) => (p.value == null ? "" : money(p.value)),
       cellClassRules: { "mono": () => true } },
     { field: "status" as any, headerName: "Status", width: 120, filter: "agTextColumnFilter", cellRenderer: (p: any) => p.value ? <span className={`pill ${p.value}`}>{p.value}</span> : null },
-    { field: "reason" as any, headerName: "Why held / flags", flex: 1, minWidth: 220, tooltipField: "reason" as any },
-    { field: "payout" as any, headerName: "Payout batch", width: 200 },
-    { field: "receipt" as any, headerName: "Receipt", width: 110, sortable: false, filter: false, cellRenderer: (p: any) => p.value ? <a href={p.value} target="_blank" rel="noreferrer">View receipt</a> : null },
+    { field: "reason" as any, headerName: "Why held / flags", flex: 1, minWidth: 180, tooltipField: "reason" as any },
+    { field: "payout" as any, headerName: "Payout batch", flex: 1, minWidth: 160, tooltipField: "payout" as any },
+    { field: "receipt" as any, headerName: "Receipt", flex: 1, minWidth: 120, sortable: false, filter: false, cellRenderer: (p: any) => p.value ? <a href={p.value} target="_blank" rel="noreferrer">View receipt</a> : null },
   ], []);
 
   const spendsOnly = rows.filter((r): r is Extract<Row, { kind: "spend" }> => r.kind === "spend");
-  const pinned = useMemo(() => [{ kind: "spend", vendor: "Approved total", amount: spendsOnly.filter((r) => r.status === "approved" || r.status === "paid").reduce((t, r) => t + r.amount, 0) } as any], [rows]);
+  const pinned = useMemo(() => [{ kind: "spend", vendor: "Approved", amount: spendsOnly.filter((r) => r.status === "approved" || r.status === "paid").reduce((t, r) => t + r.amount, 0) } as any], [rows]);
 
   async function runNl(e: React.FormEvent) {
     e.preventDefault();
