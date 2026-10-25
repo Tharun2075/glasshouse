@@ -30,6 +30,10 @@ function GroupRow(p: { data: Extract<Row, { kind: "group" }>; context: { open: S
   </div>);
 }
 
+// Phones: keep Vendor, Amount, Status and the hold reason; hide the rest so the reason is on screen at 390px.
+const NARROW_HIDE = ["id", "date", "category", "payout", "receipt"];
+function fit(a: GridApi<Row>) { a.setColumnsVisible(NARROW_HIDE, typeof window === "undefined" || window.innerWidth > 640); }
+
 export default function LedgerGrid({ data }: { data: Data }) {
   const api = useRef<GridApi<Row> | null>(null);
   const [open, setOpen] = useState<Set<number>>(() => new Set(data.appeals.map((a) => a.id)));
@@ -58,7 +62,7 @@ export default function LedgerGrid({ data }: { data: Data }) {
   ], []);
 
   const spendsOnly = rows.filter((r): r is Extract<Row, { kind: "spend" }> => r.kind === "spend");
-  const pinned = useMemo(() => [{ kind: "spend", vendor: "Total (approved + paid)", amount: spendsOnly.filter((r) => r.status === "approved" || r.status === "paid").reduce((t, r) => t + r.amount, 0) } as any], [rows]);
+  const pinned = useMemo(() => [{ kind: "spend", vendor: "Approved total", amount: spendsOnly.filter((r) => r.status === "approved" || r.status === "paid").reduce((t, r) => t + r.amount, 0) } as any], [rows]);
 
   async function runNl(e: React.FormEvent) {
     e.preventDefault();
@@ -91,7 +95,8 @@ export default function LedgerGrid({ data }: { data: Data }) {
         doesExternalFilterPass={(n: IRowNode<Row>) => n.data?.kind === "group" || openRef.current.has(n.data!.appeal_id)}
         rowClassRules={{ "row-held": (p) => p.data?.kind === "spend" && p.data.status === "held", "row-group": (p) => p.data?.kind === "group", "row-paid": (p) => p.data?.kind === "spend" && p.data.status === "paid" }}
         getRowId={(p) => p.data.kind === "group" ? `g${p.data.appeal_id}` : `s${p.data.id}`}
-        onGridReady={(e) => { api.current = e.api; }}
+        onGridReady={(e) => { api.current = e.api; fit(e.api); }}
+        onGridSizeChanged={(e) => fit(e.api)}
       />
     </div>
   </div>);
