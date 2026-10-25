@@ -35,3 +35,42 @@ Expected values come from `data/fixtures/manifest.json` (the generator's own tru
 ## Cost
 
 12 API calls in all: 8 in the first run and 4 in the rerun of the 4 failing items. Rows with no key still use the demo reader and the rule parser, and they are labelled that way.
+
+
+## Run 2 (2026-10-25, after round-2 fixes): files in `run2/`
+
+This run used the same 5 receipts and the same 3 questions, plus 2 new questions (a date range and a status word). Everything went through the same app code: `ClaudeExtractor` + `addSpend` for receipts, and `nlToFilter` with the real appeal titles for questions. "Today" was pinned to 2026-10-25 so the date answers can be checked.
+
+Command: `LIVE_RUN=run2 LIVE_TODAY=2026-10-25 node --experimental-strip-types scripts/live-claude-run.ts`.
+
+The script scores itself:
+- Vendors are compared ignoring case and punctuation (`normVendor`).
+- Categories are compared via `normCategory`.
+- A filter is **full** only if every expected field matches and every other field is empty.
+
+What changed since run 1:
+- One shared category list (`lib/categories.ts`: food, supplies, equipment, fuel, transport, utilities, other), used by the prompt, the schema, the seed and the manifest.
+- The prompt asks for vendor names in Title Case.
+- The filter gained date_from/date_to, a status list (unpaid = pending + held + approved), and an appeal field matched to a hidden Appeal column. Claude is given the appeal titles.
+
+| # | receipt | fields | vendor | category | confidence | ledger result | request_id | time (UTC) |
+|---|---|---|---|---|---|---|---|---|
+| 1 | r1.png | 6/6 | `Greenfield Wholesale Foods` | `food` | 0.97 | PENDING | `req_011CgNJDmTvosdNTXCtBSUPP` | 2026-10-25T04:08:10 |
+| 2 | r4.png | 6/6 | `Hearth Kitchen Supply` | `equipment` | 0.97 | PENDING | `req_011CgNJE1ZFtQoyNfMEsKYtb` | 2026-10-25T04:08:13 |
+| 3 | r5.png | 6/6 | `Northgate Fuel Stop` | `fuel` | 0.97 | PENDING | `req_011CgNJE9Mp3q2KmTEmqyZvh` | 2026-10-25T04:08:15 |
+| 4 | upload-sample.png | 6/6 | `Corner Market Co-op` | `food` | 0.97 | PENDING | `req_011CgNJEGTwooMDJhASgoDYV` | 2026-10-25T04:08:17 |
+| 5 | unreadable.png | (none expected) | `Unreadable receipt` | `other` | 0 | HELD (Held: no amount could be read from this receipt ($0.00); re-upload a clearer photo · Held: receipt is hard to read (confidence 0.00, need 0.5); check it by hand) | `req_011CgNJEQNh1jsTaxiX8LNXs` | 2026-10-25T04:08:19 |
+
+**Readable receipts: 24/24 fields match** (run 1: 21/24). r4 now reads `equipment` and r5 reads `fuel`, both from the shared list. The r5 vendor came back in Title Case. The unreadable receipt is still kept and HELD, never payable.
+
+| # | question | Claude's filter (non-empty fields) | verdict | request_id |
+|---|---|---|---|---|
+| 1 | food over 20 dollars last month | `{"category": "food", "min_amount": 20, "date_from": "2026-09-01", "date_to": "2026-09-30"}` | full | `req_011CgNJEVZjLaruwQLdGkhXg` |
+| 2 | unpaid receipts from Fresh Mart | `{"statuses": ["pending", "held", "approved"], "vendor": "Fresh Mart"}` | full | `req_011CgNJEgouiswumHazLwqGW` |
+| 3 | held spends for kitchen equipment under $400 | `{"statuses": ["held"], "appeal": "Kitchen Equipment", "max_amount": 400}` | full | `req_011CgNJEo6gRDF8wxCrB4gDJ` |
+| 4 | receipts since 1 Oct over $50 | `{"min_amount": 50, "date_from": "2026-10-01", "date_to": "2026-10-25"}` | full | `req_011CgNJEv2tmmAQhZSPrGUkM` |
+| 5 | paid spends for Winter Food Parcels | `{"statuses": ["paid"], "appeal": "Winter Food Parcels"}` | full | `req_011CgNJF1hTzhUeR5WqRadWu` |
+
+**Filters: 5/5 full** (run 1: 0/3 full, 3 partial). Questions 4 and 5 are new. The no-key rule parser gives the same 5 answers (unit test `tests/unit/nlfilter.test.ts`).
+
+Run 2 cost: 10 API calls (5 receipts + 5 questions). Run 1 files stay in this folder as history.

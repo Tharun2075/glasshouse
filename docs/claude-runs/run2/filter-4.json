@@ -1,0 +1,73 @@
+{
+ "n": 4,
+ "question": "receipts since 1 Oct over $50",
+ "model": "claude-sonnet-5-5",
+ "at_utc": "2026-10-25T04:08:26.184Z",
+ "expected": {
+  "min_amount": 50,
+  "date_from": "2026-10-01",
+  "date_to": "2026-10-25"
+ },
+ "verdict": {
+  "full": true,
+  "wrong": []
+ },
+ "by": "claude",
+ "intent": {
+  "statuses": [],
+  "vendor": null,
+  "category": null,
+  "appeal": null,
+  "min_amount": 50,
+  "max_amount": null,
+  "date_from": "2026-10-01",
+  "date_to": "2026-10-25"
+ },
+ "ag_grid_filter_model": {
+  "amount": {
+   "filterType": "number",
+   "type": "greaterThan",
+   "filter": 50
+  },
+  "date": {
+   "filterType": "date",
+   "type": "inRange",
+   "dateFrom": "2026-10-01",
+   "dateTo": "2026-10-25"
+  }
+ },
+ "request_id": "req_011CgNJEv2tmmAQhZSPrGUkM",
+ "raw_response": {
+  "model": "claude-sonnet-5-5",
+  "id": "msg_011CgNJEvNUt5MWJJaRZi8Zg",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"statuses\":[],\"vendor\":null,\"category\":null,\"appeal\":null,\"min_amount\":50,\"max_amount\":null,\"date_from\":\"2026-10-01\",\"date_to\":\"2026-10-25\"}"
+   }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+   "input_tokens": 962,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 71,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "standard",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "diagnostics": null
+ }
+}

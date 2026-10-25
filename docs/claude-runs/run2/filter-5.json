@@ -1,0 +1,75 @@
+{
+ "n": 5,
+ "question": "paid spends for Winter Food Parcels",
+ "model": "claude-sonnet-5-5",
+ "at_utc": "2026-10-25T04:08:27.521Z",
+ "expected": {
+  "statuses": [
+   "paid"
+  ],
+  "appeal": "Winter Food Parcels"
+ },
+ "verdict": {
+  "full": true,
+  "wrong": []
+ },
+ "by": "claude",
+ "intent": {
+  "statuses": [
+   "paid"
+  ],
+  "vendor": null,
+  "category": null,
+  "appeal": "Winter Food Parcels",
+  "min_amount": null,
+  "max_amount": null,
+  "date_from": null,
+  "date_to": null
+ },
+ "ag_grid_filter_model": {
+  "status": {
+   "filterType": "text",
+   "type": "equals",
+   "filter": "paid"
+  },
+  "appeal": {
+   "filterType": "text",
+   "type": "contains",
+   "filter": "Winter Food Parcels"
+  }
+ },
+ "request_id": "req_011CgNJF1hTzhUeR5WqRadWu",
+ "raw_response": {
+  "model": "claude-sonnet-5-5",
+  "id": "msg_011CgNJF22orYLoS9qjZXv7v",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"statuses\":[\"paid\"],\"vendor\":null,\"category\":null,\"appeal\":\"Winter Food Parcels\",\"min_amount\":null,\"max_amount\":null,\"date_from\":null,\"date_to\":null}"
+   }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+   "input_tokens": 963,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 70,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "standard",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "diagnostics": null
+ }
+}

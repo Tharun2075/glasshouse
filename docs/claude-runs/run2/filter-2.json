@@ -1,0 +1,95 @@
+{
+ "n": 2,
+ "question": "unpaid receipts from Fresh Mart",
+ "model": "claude-sonnet-5-5",
+ "at_utc": "2026-10-25T04:08:23.094Z",
+ "expected": {
+  "vendor": "Fresh Mart",
+  "statuses": [
+   "approved",
+   "held",
+   "pending"
+  ]
+ },
+ "verdict": {
+  "full": true,
+  "wrong": []
+ },
+ "by": "claude",
+ "intent": {
+  "statuses": [
+   "pending",
+   "held",
+   "approved"
+  ],
+  "vendor": "Fresh Mart",
+  "category": null,
+  "appeal": null,
+  "min_amount": null,
+  "max_amount": null,
+  "date_from": null,
+  "date_to": null
+ },
+ "ag_grid_filter_model": {
+  "status": {
+   "filterType": "text",
+   "operator": "OR",
+   "conditions": [
+    {
+     "filterType": "text",
+     "type": "equals",
+     "filter": "pending"
+    },
+    {
+     "filterType": "text",
+     "type": "equals",
+     "filter": "held"
+    },
+    {
+     "filterType": "text",
+     "type": "equals",
+     "filter": "approved"
+    }
+   ]
+  },
+  "vendor": {
+   "filterType": "text",
+   "type": "contains",
+   "filter": "Fresh Mart"
+  }
+ },
+ "request_id": "req_011CgNJEgouiswumHazLwqGW",
+ "raw_response": {
+  "model": "claude-sonnet-5-5",
+  "id": "msg_011CgNJEh91ZWWnktoPuq1gx",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"statuses\":[\"pending\",\"held\",\"approved\"],\"vendor\":\"Fresh Mart\",\"category\":null,\"appeal\":null,\"min_amount\":null,\"max_amount\":null,\"date_from\":null,\"date_to\":null}"
+   }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+   "input_tokens": 964,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 73,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "standard",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "diagnostics": null
+ }
+}

@@ -1,0 +1,81 @@
+{
+ "n": 3,
+ "question": "held spends for kitchen equipment under $400",
+ "model": "claude-sonnet-5-5",
+ "at_utc": "2026-10-25T04:08:24.569Z",
+ "expected": {
+  "statuses": [
+   "held"
+  ],
+  "appeal": "Kitchen Equipment",
+  "max_amount": 400
+ },
+ "verdict": {
+  "full": true,
+  "wrong": []
+ },
+ "by": "claude",
+ "intent": {
+  "statuses": [
+   "held"
+  ],
+  "vendor": null,
+  "category": null,
+  "appeal": "Kitchen Equipment",
+  "min_amount": null,
+  "max_amount": 400,
+  "date_from": null,
+  "date_to": null
+ },
+ "ag_grid_filter_model": {
+  "status": {
+   "filterType": "text",
+   "type": "equals",
+   "filter": "held"
+  },
+  "appeal": {
+   "filterType": "text",
+   "type": "contains",
+   "filter": "Kitchen Equipment"
+  },
+  "amount": {
+   "filterType": "number",
+   "type": "lessThan",
+   "filter": 400
+  }
+ },
+ "request_id": "req_011CgNJEo6gRDF8wxCrB4gDJ",
+ "raw_response": {
+  "model": "claude-sonnet-5-5",
+  "id": "msg_011CgNJEoUFSFDpPKewWT2FJ",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"statuses\":[\"held\"],\"vendor\":null,\"category\":null,\"appeal\":\"Kitchen Equipment\",\"min_amount\":null,\"max_amount\":400,\"date_from\":null,\"date_to\":null}"
+   }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+   "input_tokens": 963,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 69,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "standard",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "diagnostics": null
+ }
+}

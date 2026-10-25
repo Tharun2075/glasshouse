@@ -1,0 +1,95 @@
+{
+ "n": 2,
+ "file": "data/receipts/r4.png",
+ "appeal_id": 2,
+ "model": "claude-sonnet-5-5",
+ "at_utc": "2026-10-25T04:08:13.911Z",
+ "expected": {
+  "vendor": "Hearth Kitchen Supply",
+  "date": "2026-09-25",
+  "amount": 120,
+  "currency": "USD",
+  "category": "equipment",
+  "line_items": [
+   {
+    "description": "Stock pot 40 L",
+    "amount": 85
+   },
+   {
+    "description": "Ladles x5",
+    "amount": 35
+   }
+  ],
+  "confidence": 0.94
+ },
+ "by": "claude",
+ "extracted": {
+  "vendor": "Hearth Kitchen Supply",
+  "date": "2026-09-25",
+  "amount": 120,
+  "currency": "USD",
+  "category": "equipment",
+  "line_items": [
+   {
+    "description": "Stock pot 40 L",
+    "amount": 85
+   },
+   {
+    "description": "Ladles x5",
+    "amount": 35
+   }
+  ],
+  "confidence": 0.97
+ },
+ "ledger": {
+  "status": "pending",
+  "hold_reason": null,
+  "flags": []
+ },
+ "fields": {
+  "matched": 6,
+  "of": 6,
+  "eq": {
+   "vendor": true,
+   "date": true,
+   "amount": true,
+   "currency": true,
+   "category": true,
+   "line_items": true
+  }
+ },
+ "request_id": "req_011CgNJE1ZFtQoyNfMEsKYtb",
+ "raw_response": {
+  "model": "claude-sonnet-5-5",
+  "id": "msg_011CgNJE1u6WqxSd2SHo3zzW",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"vendor\":\"Hearth Kitchen Supply\",\"date\":\"2026-09-25\",\"amount\":120.00,\"currency\":\"USD\",\"category\":\"equipment\",\"line_items\":[{\"description\":\"Stock pot 40 L\",\"amount\":85.00},{\"description\":\"Ladles x5\",\"amount\":35.00}],\"confidence\":0.97}"
+   }
+  ],
+  "container": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+   "input_tokens": 901,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation": {
+    "ephemeral_5m_input_tokens": 0,
+    "ephemeral_1h_input_tokens": 0
+   },
+   "output_tokens": 110,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "service_tier": "standard",
+   "inference_geo": "global",
+   "speed": "standard"
+  },
+  "diagnostics": null
+ }
+}
