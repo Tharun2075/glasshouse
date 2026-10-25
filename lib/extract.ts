@@ -4,6 +4,7 @@ import { z } from "zod";
 import { createHash } from "node:crypto";
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
+import { CATEGORIES, normCategory } from "./categories.ts";
 
 export const MODEL = "claude-sonnet-5-5";
 export const ExtractionSchema = z.object({
@@ -11,19 +12,23 @@ export const ExtractionSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   amount: z.number().nonnegative(),
   currency: z.string().length(3),
-  category: z.string().min(1),
+  category: z.string().min(1).transform(normCategory),
   line_items: z.array(z.object({ description: z.string(), amount: z.number() })),
   confidence: z.number().min(0).max(1),
 });
-export type Extraction = z.infer<typeof ExtractionSchema>;
+export type Extraction = Omit<z.infer<typeof ExtractionSchema>, "category"> & { category: string };
 export type ExtractResult = { data: Extraction; by: "claude" | "mock" };
+
+export const EXTRACT_PROMPT = "Extract this charity expense receipt. vendor is the business name in normal Title Case, even if printed in capitals. " +
+  `amount is the receipt total. category is one of: ${CATEGORIES.join(", ")} (equipment = kitchen or other durable gear; fuel = diesel or petrol). ` +
+  "Give line_items as printed. If you cannot read the receipt, leave unread fields empty, amount 0 and confidence 0.";
 
 export const JSON_SCHEMA = {
   type: "object", additionalProperties: false,
   required: ["vendor", "date", "amount", "currency", "category", "line_items", "confidence"],
   properties: {
     vendor: { type: "string" }, date: { type: "string", description: "YYYY-MM-DD" }, amount: { type: "number" },
-    currency: { type: "string", description: "ISO 4217" }, category: { type: "string" },
+    currency: { type: "string", description: "ISO 4217" }, category: { type: "string", enum: [...CATEGORIES] },
     line_items: { type: "array", items: { type: "object", additionalProperties: false, required: ["description", "amount"], properties: { description: { type: "string" }, amount: { type: "number" } } } },
     confidence: { type: "number", description: "0..1, your confidence the fields are right" },
   },
@@ -45,7 +50,7 @@ export class MockExtractor implements Extractor {
   }
   async extract(png: Buffer): Promise<ExtractResult> {
     const hit = this.manifest[sha256(png)];
-    const data = hit ?? { ...unreadable(), vendor: "Unreadable receipt (mock)", category: "uncategorised" };
+    const data = hit ?? { ...unreadable(), vendor: "Unreadable receipt (mock)" };
     return { data: ExtractionSchema.parse(data), by: "mock" };
   }
 }
@@ -62,7 +67,7 @@ export class ClaudeExtractor implements Extractor {
       output_config: { format: { type: "json_schema", schema: JSON_SCHEMA } },
       messages: [{ role: "user", content: [
         { type: "image", source: { type: "base64", media_type: "image/png", data: png.toString("base64") } },
-        { type: "text", text: "Extract this charity expense receipt. amount is the receipt total. category is one of: food, supplies, transport, utilities, other. Give line_items as printed. If you cannot read the receipt, leave unread fields empty, amount 0 and confidence 0." },
+        { type: "text", text: EXTRACT_PROMPT },
       ] }],
     });
     if (msg.stop_reason === "refusal") throw new Error("model refused the receipt");

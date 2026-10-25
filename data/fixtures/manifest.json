@@ -4,7 +4,7 @@
   "date": "2026-09-08",
   "amount": 40.0,
   "currency": "USD",
-  "category": "Food",
+  "category": "food",
   "line_items": [
    {
     "description": "Rice 10 kg x2",
@@ -22,7 +22,7 @@
   "date": "2026-09-15",
   "amount": 55.0,
   "currency": "USD",
-  "category": "Food",
+  "category": "food",
   "line_items": [
    {
     "description": "Tinned tomatoes x24",
@@ -40,7 +40,7 @@
   "date": "2026-09-22",
   "amount": 60.0,
   "currency": "USD",
-  "category": "Food",
+  "category": "food",
   "line_items": [
    {
     "description": "Cooking oil 5 L x3",
@@ -58,7 +58,7 @@
   "date": "2026-09-25",
   "amount": 120.0,
   "currency": "USD",
-  "category": "Equipment",
+  "category": "equipment",
   "line_items": [
    {
     "description": "Stock pot 40 L",
@@ -76,7 +76,7 @@
   "date": "2026-10-01",
   "amount": 35.0,
   "currency": "USD",
-  "category": "Fuel",
+  "category": "fuel",
   "line_items": [
    {
     "description": "Diesel 21.9 L",
@@ -90,7 +90,7 @@
   "date": "2026-10-01",
   "amount": 35.0,
   "currency": "USD",
-  "category": "Fuel",
+  "category": "fuel",
   "line_items": [
    {
     "description": "Diesel 21.9 L",
@@ -104,7 +104,7 @@
   "date": "2026-10-06",
   "amount": 480.0,
   "currency": "USD",
-  "category": "Food",
+  "category": "food",
   "line_items": [
    {
     "description": "Mixed pallet dry goods",
@@ -118,7 +118,7 @@
   "date": "2026-10-12",
   "amount": 310.0,
   "currency": "USD",
-  "category": "Equipment",
+  "category": "equipment",
   "line_items": [
    {
     "description": "Chest freezer 200 L",
@@ -132,7 +132,7 @@
   "date": "2026-10-20",
   "amount": 42.5,
   "currency": "USD",
-  "category": "Food",
+  "category": "food",
   "line_items": [
    {
     "description": "Fresh vegetables",

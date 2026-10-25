@@ -8,15 +8,15 @@ sys.path.insert(0, os.path.join(ROOT, "brand-tokens"))
 from theme import LIGHT_RGB as C  # noqa: E402
 
 RECEIPTS = [  # (file, appeal_id, vendor, date, category, receipt_no, [(desc, amount)])
-    ("r1.png", 1, "Greenfield Wholesale Foods", "2026-09-08", "Food", "GW-1041", [("Rice 10 kg x2", 18.00), ("Lentils 5 kg x2", 22.00)]),
-    ("r2.png", 1, "Greenfield Wholesale Foods", "2026-09-15", "Food", "GW-1088", [("Tinned tomatoes x24", 21.00), ("Pasta 5 kg x4", 34.00)]),
-    ("r3.png", 1, "Riverside Cash and Carry", "2026-09-22", "Food", "RC-5520", [("Cooking oil 5 L x3", 33.00), ("Oats 3 kg x6", 27.00)]),
-    ("r4.png", 2, "Hearth Kitchen Supply", "2026-09-25", "Equipment", "HK-0307", [("Stock pot 40 L", 85.00), ("Ladles x5", 35.00)]),
-    ("r5.png", 3, "Northgate Fuel Stop", "2026-10-01", "Fuel", "NF-77812", [("Diesel 21.9 L", 35.00)]),
-    ("r6.png", 3, "Northgate Fuel Stop", "2026-10-01", "Fuel", "NF-77813", [("Diesel 21.9 L", 35.00)]),
-    ("r7.png", 1, "Bulkway Provisions", "2026-10-06", "Food", "BP-2290", [("Mixed pallet dry goods", 480.00)]),
-    ("r8.png", 2, "Hearth Kitchen Supply", "2026-10-12", "Equipment", "HK-0391", [("Chest freezer 200 L", 310.00)]),
-    ("upload-sample.png", 1, "Corner Market Co-op", "2026-10-20", "Food", "CM-0912", [("Fresh vegetables", 28.50), ("Bread loaves x8", 14.00)]),
+    ("r1.png", 1, "Greenfield Wholesale Foods", "2026-09-08", "food", "GW-1041", [("Rice 10 kg x2", 18.00), ("Lentils 5 kg x2", 22.00)]),
+    ("r2.png", 1, "Greenfield Wholesale Foods", "2026-09-15", "food", "GW-1088", [("Tinned tomatoes x24", 21.00), ("Pasta 5 kg x4", 34.00)]),
+    ("r3.png", 1, "Riverside Cash and Carry", "2026-09-22", "food", "RC-5520", [("Cooking oil 5 L x3", 33.00), ("Oats 3 kg x6", 27.00)]),
+    ("r4.png", 2, "Hearth Kitchen Supply", "2026-09-25", "equipment", "HK-0307", [("Stock pot 40 L", 85.00), ("Ladles x5", 35.00)]),
+    ("r5.png", 3, "Northgate Fuel Stop", "2026-10-01", "fuel", "NF-77812", [("Diesel 21.9 L", 35.00)]),
+    ("r6.png", 3, "Northgate Fuel Stop", "2026-10-01", "fuel", "NF-77813", [("Diesel 21.9 L", 35.00)]),
+    ("r7.png", 1, "Bulkway Provisions", "2026-10-06", "food", "BP-2290", [("Mixed pallet dry goods", 480.00)]),
+    ("r8.png", 2, "Hearth Kitchen Supply", "2026-10-12", "equipment", "HK-0391", [("Chest freezer 200 L", 310.00)]),
+    ("upload-sample.png", 1, "Corner Market Co-op", "2026-10-20", "food", "CM-0912", [("Fresh vegetables", 28.50), ("Bread loaves x8", 14.00)]),
 ]
 
 def font(sz):

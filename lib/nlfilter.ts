@@ -1,6 +1,7 @@
 // Plain English -> AG Grid filter model. Claude when ANTHROPIC_API_KEY is set, else a small rule parser (labelled "rules").
 import { z } from "zod";
 import { MODEL, anthropicOptions } from "./extract.ts";
+import { CATEGORIES } from "./categories.ts";
 
 export const Intent = z.object({
   status: z.enum(["pending", "held", "approved", "paid", "rejected"]).nullable(),
@@ -11,16 +12,16 @@ export type Intent = z.infer<typeof Intent>;
 const nullable = (t: string) => ({ type: [t, "null"] });
 // The API rejects an enum under a type array (live 400, 2026-10-25), so status uses anyOf.
 export const SCHEMA = { type: "object", additionalProperties: false, required: ["status", "vendor", "category", "appeal", "min_amount", "max_amount"],
-  properties: { status: { anyOf: [{ type: "string", enum: ["pending", "held", "approved", "paid", "rejected"] }, { type: "null" }] }, vendor: nullable("string"), category: nullable("string"),
+  properties: { status: { anyOf: [{ type: "string", enum: ["pending", "held", "approved", "paid", "rejected"] }, { type: "null" }] }, vendor: nullable("string"), category: { anyOf: [{ type: "string", enum: [...CATEGORIES] }, { type: "null" }] },
     appeal: nullable("string"), min_amount: nullable("number"), max_amount: nullable("number") } };
 
 export function ruleIntent(q: string): Intent {
   const s = q.toLowerCase();
   const num = (re: RegExp) => { const m = s.match(re); return m ? Number(m[1].replace(/,/g, "")) : null; };
   const status = (["pending", "held", "approved", "paid", "rejected"] as const).find((k) => s.includes(k)) ?? (/(flag|anomal|suspicious)/.test(s) ? "held" : null);
-  const cat = ["food", "supplies", "transport", "utilities", "fuel"].find((k) => s.includes(k)) ?? null;
+  const cat = CATEGORIES.find((k) => s.includes(k)) ?? null;
   return { status, vendor: (s.match(/(?:from|at|vendor)\s+([a-z][a-z ]+?)(?:\s+(?:over|under|above|below|more|less)|$)/)?.[1] ?? null),
-    category: cat === "fuel" ? "transport" : cat, appeal: null,
+    category: cat, appeal: null,
     min_amount: num(/(?:over|above|more than|>)\s*\$?([\d,.]+)/), max_amount: num(/(?:under|below|less than|<)\s*\$?([\d,.]+)/) };
 }
 
