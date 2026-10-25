@@ -8,7 +8,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
       <label htmlFor="password">Password</label><input id="password" name="password" type="password" autoComplete="current-password" required />
       <p><button type="submit">Sign in</button></p>
     </form>
-    <h2>Demo logins (sandbox only)</h2>
+    <h2>Judges: use these demo logins (sandbox only)</h2>
     <table className="plain"><thead><tr><th>Role</th><th>Email</th></tr></thead><tbody>
       <tr><td>Donor</td><td className="mono">donor@northside.test</td></tr>
       <tr><td>Volunteer</td><td className="mono">volunteer@northside.test</td></tr>

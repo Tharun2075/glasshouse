@@ -7,7 +7,7 @@ export default function Home() {
   const l = ledger();
   return (<>
     <h1>Northside Food Bank — public ledger</h1>
-    <p className="lede">Every donation and every spend, with the receipt behind it. Held items are shown in red and are never paid until a trustee clears them. Sandbox data only.</p>
+    <p className="lede">Every donation and every spend, with the receipt behind it. Held items are shown in amber and are never paid until a trustee clears them. Sandbox data only.</p>
     <div className="cards">
       {l.appeals.map((a) => (
         <div className="card" key={a.id}>
@@ -16,6 +16,14 @@ export default function Home() {
           <div className="muted">${fmt(a.spent_cents)} spent · goal ${fmt(a.goal_cents)}</div>
           <div className="bar" role="img" aria-label={`${Math.round((100 * a.raised_cents) / a.goal_cents)}% of goal`}><span style={{ width: `${Math.min(100, (100 * a.raised_cents) / a.goal_cents)}%` }} /></div>
         </div>))}
+    </div>
+    <div className="cta-row">
+      <a className="btn" href="/donate">Donate to an appeal</a>
+      <form action="/trace" method="get" className="trace-form">
+        <label htmlFor="gift">Trace your gift</label>
+        <input id="gift" name="id" inputMode="numeric" pattern="[0-9]+" placeholder="Donation number, e.g. 12" required />
+        <button type="submit" className="ghost">Trace</button>
+      </form>
     </div>
     <h2>Spends by appeal</h2>
     <LedgerGrid data={l} />
