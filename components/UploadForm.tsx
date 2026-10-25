@@ -12,6 +12,7 @@ export default function UploadForm({ appeals }: { appeals: { id: number; title: 
     <form onSubmit={submit} className="card" style={{ display: "grid", gap: 12, maxWidth: 480 }}>
       <label htmlFor="appeal_id">Appeal</label>
       <select id="appeal_id" name="appeal_id">{appeals.map((a) => <option key={a.id} value={a.id}>{a.title}</option>)}</select>
+      <p className="muted" style={{ margin: 0 }}>No receipt handy? <a href="/sample-receipt.png" download="sample-receipt.png">Download a sample receipt to try</a>, then pick it below.</p>
       <label htmlFor="receipt">Receipt image (PNG, under 5 MB)</label>
       <input id="receipt" name="receipt" type="file" accept="image/png" required />
       <button type="submit" disabled={busy}>{busy ? "Reading receipt…" : "Upload and read"}</button>
