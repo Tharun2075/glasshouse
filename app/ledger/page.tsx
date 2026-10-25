@@ -18,7 +18,8 @@ export default function Home() {
   return (<>
     <section className="hero">
       <div className="rise">
-        <h1>Northside Food Bank — <em>public ledger</em></h1>
+        <p className="eyebrow">Northside Food Bank · public ledger</p>
+        <h1>Every dollar, <em>see through</em>.</h1>
         <p className="lede">Every donation and every spend, with the receipt behind it. Held items are shown in amber and are never paid until a trustee clears them. Sandbox data only.</p>
         <div className="cta-row">
           <a className="btn lg" href="/donate"><HeartHandshake className="icon" aria-hidden size={20} />Donate to an appeal</a>
@@ -47,7 +48,7 @@ export default function Home() {
     </ul>
 
     <div className="section-head"><h2>Appeals</h2><p className="legend"><span><i />Raised</span><span><i className="spent" />Spent</span></p></div>
-    <div className="cards">
+    <div className="cards" data-reveal>
       {l.appeals.map((a) => (
         <article className="card appeal" key={a.id}>
           <div className="head"><span className="badge"><AppealIcon title={a.title} /></span><h3>{a.title}</h3></div>
@@ -64,7 +65,7 @@ export default function Home() {
     <LedgerGrid data={l} />
 
     <div className="section-head"><h2>Recent donations</h2><p>Follow any gift to the receipts it paid for.</p></div>
-    <ul className="rows">
+    <ul className="rows" data-reveal>
       {l.donations.slice(-8).reverse().map((d) => (
         <li key={d.id}>
           <span className="avatar" aria-hidden>{d.donor_name.trim().charAt(0).toUpperCase() || "?"}</span>

@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 export default async function Donate({ searchParams }: { searchParams: Promise<{ cancelled?: string; error?: string }> }) {
   const sp = await searchParams, u = await currentUser();
   return (<>
-    <div className="hero rise"><h1>Give to <em>Northside Food Bank</em></h1>
+    <div className="hero rise"><p className="eyebrow">Northside Food Bank · donate</p><h1>Give, then <em>watch it land</em>.</h1>
     <p className="lede">You pay through PayPal (sandbox). Afterwards you get a link showing exactly which receipts your gift paid for.</p></div>
     <ol className="steps" aria-label="What happens next">
       <li><strong>Pay</strong><span>with PayPal (sandbox)</span></li>

@@ -12,7 +12,8 @@ export default async function Trace({ params }: { params: Promise<{ id: string }
   if (!t) notFound();
   return (<>
     <section className="hero trace-hero rise">
-      <h1>Where did your <em>${fmt(t.donation.amount_cents)}</em> go?</h1>
+      <p className="eyebrow">Trace · donation #{t.donation.id}</p>
+      <h1>Where did your <span className="num">${fmt(t.donation.amount_cents)}</span> <em>go</em>?</h1>
       <p className="lede">Donation #{t.donation.id} from {t.donation.donor_name} to <strong>{t.appeal.title}</strong>. Gifts are spent oldest-first, so each dollar is matched to the receipts below.</p>
       <div className="cta-row"><CopyLink /><span className="muted">Anyone with this link sees the same receipts. No login needed.</span></div>
     </section>

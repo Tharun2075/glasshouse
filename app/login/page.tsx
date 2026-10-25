@@ -1,7 +1,7 @@
 export default async function Login({ searchParams }: { searchParams: Promise<{ error?: string; email?: string }> }) {
   const sp = await searchParams;
-  return (<>
-    <div className="hero rise"><h1>Sign in</h1>
+  return (<div className="login">
+    <div className="hero rise"><p className="eyebrow">Volunteers and trustees</p><h1>Sign in to <em>decide</em>.</h1>
     <p className="lede">Volunteers upload receipts, trustees approve spends. Donors do not need an account.</p></div>
     <div className="split rise d1"><div className="panel">
     {sp.error && <p className="note err" role="alert">That email and password did not match.</p>}
@@ -17,5 +17,5 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
       <tr><td>Trustee</td><td className="mono">trustee@northside.test</td></tr>
     </tbody></table>
     <p className="muted">Password for all three: <code>glasshouse-demo</code></p></div></div>
-  </>);
+  </div>);
 }
