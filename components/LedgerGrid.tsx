@@ -45,6 +45,7 @@ export default function LedgerGrid({ data }: { data: Data }) {
   const api = useRef<GridApi<Row> | null>(null);
   const [open, setOpen] = useState<Set<number>>(() => new Set(data.appeals.map((a) => a.id)));
   const [q, setQ] = useState(""), [nl, setNl] = useState(""), [nlMsg, setNlMsg] = useState("");
+  const [ids, setIds] = useState<Set<number> | null>(null);
   const openRef = useRef(open); openRef.current = open;
   const toggle = useCallback((id: number) => setOpen((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); openRef.current = n; setTimeout(() => api.current?.onFilterChanged()); return n; }), []);
 
@@ -58,24 +59,31 @@ export default function LedgerGrid({ data }: { data: Data }) {
   const cols = useMemo<ColDef<Row>[]>(() => [
     { field: "id" as any, headerName: "#", width: 70, filter: "agNumberColumnFilter" },
     // Dates are "YYYY-MM-DD" strings; inclusive range so "since 1 Oct" keeps 1 Oct itself.
-    { field: "date" as any, headerName: "Date", width: 120, cellDataType: "dateString", filter: "agDateColumnFilter", filterParams: { inRangeInclusive: true }, sort: undefined },
+    { field: "date" as any, headerName: "Date", width: 132, minWidth: 132, cellDataType: "dateString", filter: "agDateColumnFilter", filterParams: { inRangeInclusive: true }, sort: undefined },
     // Hidden: lets the plain-words filter match an appeal name ("kitchen equipment") without touching category.
     { field: "appeal" as any, headerName: "Appeal", hide: true, filter: "agTextColumnFilter" },
     // Phones hide the "Why held" column, so a held row repeats its reason under the vendor (CSS shows .why only below 640px).
-    { field: "vendor" as any, headerName: "Vendor", flex: 1, minWidth: 120, filter: "agTextColumnFilter", autoHeight: true,
+    { field: "vendor" as any, headerName: "Vendor", flex: 1, minWidth: 110, filter: "agTextColumnFilter", autoHeight: true,
       cellRenderer: (p: any) => (<div className="vendor-cell">{p.value}{p.data?.status === "held" && p.data.reason && <span className="why">{p.data.reason}</span>}</div>) },
-    { field: "category" as any, headerName: "Category", width: 120, filter: "agTextColumnFilter" },
+    { field: "category" as any, headerName: "Category", width: 100, filter: "agTextColumnFilter" },
     { field: "amount" as any, headerName: "Amount", width: 130, filter: "agNumberColumnFilter", type: "rightAligned", cellClass: ["ag-right-aligned-cell", "c-tight"], valueFormatter: (p) => (p.value == null ? "" : money(p.value)),
       cellClassRules: { "mono": () => true } },
     { field: "status" as any, headerName: "Status", width: 120, cellClass: "c-tight", filter: "agTextColumnFilter", filterParams: { maxNumConditions: 5 }, cellRenderer: (p: any) => p.value ? <StatusChip status={p.value} /> : null },
-    { field: "reason" as any, headerName: "Why held / flags", flex: 1, minWidth: 180, tooltipField: "reason" as any },
-    { field: "payout" as any, headerName: "Payout batch", flex: 1, minWidth: 160, tooltipField: "payout" as any },
-    { field: "receipt" as any, headerName: "Receipt", flex: 1, minWidth: 156, sortable: false, filter: false, cellRenderer: (p: any) => !p.value ? null
+    { field: "reason" as any, headerName: "Why held / flags", flex: 1.4, minWidth: 200, wrapText: true, autoHeight: true, cellClass: "wrap-cell" },
+    { field: "payout" as any, headerName: "Payout batch", flex: 1, minWidth: 110, tooltipField: "payout" as any },
+    { field: "receipt" as any, headerName: "Receipt", flex: 1, minWidth: 150, sortable: false, filter: false, cellRenderer: (p: any) => !p.value ? null
       : p.data.status === "approved" || p.data.status === "paid" ? <a className="receipt-link" href={p.value} target="_blank" rel="noreferrer"><FileText className="icon" aria-hidden size={16} />View receipt</a> : <span className="reader"><Hourglass className="icon" aria-hidden size={14} />After review</span> },
   ], []);
 
   const spendsOnly = rows.filter((r): r is Extract<Row, { kind: "spend" }> => r.kind === "spend");
   const pinned = useMemo(() => [{ kind: "spend", vendor: "Approved", amount: spendsOnly.filter((r) => r.status === "approved" || r.status === "paid").reduce((t, r) => t + r.amount, 0) } as any], [rows]);
+
+  // The phone cards read the grid's own filter result, so search, plain-words filter and collapse apply to both views.
+  const syncIds = useCallback((a: GridApi<Row>) => {
+    const n = new Set<number>();
+    a.forEachNodeAfterFilter((x) => { if (x.data?.kind === "spend") n.add(x.data.id); });
+    setIds(n);
+  }, []);
 
   async function runNl(e: React.FormEvent) {
     e.preventDefault();
@@ -108,9 +116,30 @@ export default function LedgerGrid({ data }: { data: Data }) {
         doesExternalFilterPass={(n: IRowNode<Row>) => n.data?.kind === "group" || openRef.current.has(n.data!.appeal_id)}
         rowClassRules={{ "row-held": (p) => p.data?.kind === "spend" && p.data.status === "held", "row-group": (p) => p.data?.kind === "group", "row-paid": (p) => p.data?.kind === "spend" && p.data.status === "paid" }}
         getRowId={(p) => p.data.kind === "group" ? `g${p.data.appeal_id}` : `s${p.data.id}`}
-        onGridReady={(e) => { api.current = e.api; fit(e.api); }}
+        onGridReady={(e) => { api.current = e.api; fit(e.api); syncIds(e.api); }}
+        onFilterChanged={(e) => syncIds(e.api)}
         onGridSizeChanged={(e) => fit(e.api)}
       />
+    </div>
+    <div className="ledger-cards" aria-label="Spends by appeal">
+      {rows.filter((r): r is Extract<Row, { kind: "group" }> => r.kind === "group").map((g) => {
+        const isOpen = open.has(g.appeal_id);
+        const list = spendsOnly.filter((r) => r.appeal_id === g.appeal_id && (ids === null || ids.has(r.id)));
+        return (<section className="lc-group" key={g.appeal_id}>
+          <div className="lc-head">
+            <button type="button" className="ghost grid-toggle" aria-expanded={isOpen} aria-label={`${isOpen ? "Collapse" : "Expand"} ${g.title}`} onClick={() => toggle(g.appeal_id)}>{isOpen ? <ChevronDown className="icon" aria-hidden size={18} /> : <ChevronRight className="icon" aria-hidden size={18} />}</button>
+            <div className="lc-title"><strong>{g.title}</strong><span className="muted">{g.count} spends · {money(g.total)}</span></div>
+            {g.held > 0 && <span className="pill held">{g.held} held</span>}
+          </div>
+          {isOpen && list.map((r) => (<article className={`lc-card${r.status === "held" ? " row-held" : ""}`} key={r.id}>
+            <div className="lc-top"><strong className="lc-vendor">{r.vendor}</strong><span className="mono lc-amt">{money(r.amount)}</span></div>
+            <div className="lc-meta"><StatusChip status={r.status} /><span className="muted">{r.date}</span></div>
+            {r.reason && <p className="lc-reason">{r.reason}</p>}
+            {r.status === "approved" || r.status === "paid" ? <a className="receipt-link" href={r.receipt} target="_blank" rel="noreferrer"><FileText className="icon" aria-hidden size={16} />View receipt</a> : <span className="reader"><Hourglass className="icon" aria-hidden size={14} />After review</span>}
+          </article>))}
+          {isOpen && list.length === 0 && <p className="muted lc-empty">No spends match.</p>}
+        </section>);
+      })}
     </div>
   </div>);
 }
