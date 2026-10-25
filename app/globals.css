@@ -66,3 +66,12 @@ ol.steps { list-style: none; counter-reset: s; display: grid; grid-template-colu
 ol.steps li { counter-increment: s; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; }
 ol.steps li strong::before { content: counter(s) ". "; color: var(--accent); } ol.steps li span { color: var(--muted); font-size: 14px; }
 label.check { display: flex; gap: 8px; align-items: center; font-weight: 400; min-height: 44px; } label.check input { width: 20px; height: 20px; }
+/* F1: phone header stays on one row; the nav scrolls sideways instead of wrapping */
+@media (max-width: 640px) {
+  header.top { flex-wrap: nowrap; gap: 12px; padding: 8px 12px; }
+  header.top .brand { font-size: 16px; flex: none; }
+  header.top nav { flex-wrap: nowrap; overflow-x: auto; min-width: 0; gap: 12px; white-space: nowrap; scrollbar-width: none; }
+  header.top nav a { padding: 10px 0; }
+  header.top .who { flex: none; }
+  header.top .who span { display: none; }
+}
