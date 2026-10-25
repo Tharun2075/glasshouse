@@ -3,7 +3,13 @@ import { one } from "./db.ts";
 
 export type User = { id: number; email: string; name: string; role: "donor" | "volunteer" | "trustee" };
 export const COOKIE = "gh_session";
-const secret = () => process.env.SESSION_SECRET || "dev-only-secret";
+/** Cookies are HMAC-signed with SESSION_SECRET; with no strong secret anyone could forge a trustee cookie, so refuse. */
+export function assertSessionSecret() {
+  const s = process.env.SESSION_SECRET ?? "";
+  if (s.length < 32) throw new Error("SESSION_SECRET is missing or shorter than 32 characters; set it in .env.local (openssl rand -hex 32)");
+  return s;
+}
+const secret = () => assertSessionSecret();
 
 export function hashPw(pw: string) { const s = randomBytes(16); return `${s.toString("hex")}:${scryptSync(pw, s, 32).toString("hex")}`; }
 export function checkPw(pw: string, stored: string) {

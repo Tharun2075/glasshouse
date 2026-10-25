@@ -5,3 +5,4 @@ import path from "node:path";
 const dir = mkdtempSync(path.join(tmpdir(), "gh-unit-"));
 process.env.GH_DATA_DIR = dir;
 process.env.GH_DB = path.join(dir, "t.db");
+process.env.SESSION_SECRET ??= "unit-test-secret-0123456789abcdef0123456789";
