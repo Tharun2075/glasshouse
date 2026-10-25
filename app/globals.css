@@ -232,8 +232,9 @@ td.reader { display: table-cell; }
 .gridwrap .ag-root-wrapper { border: 0; border-radius: 0; background: var(--bg-0); }
 .gridwrap .ag-header { background: var(--bg-0); border-bottom: var(--hair); }
 .gridwrap .ag-header-cell-text { font-family: var(--font-mono); font-size: .75rem; font-weight: 400; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); }
-.gridwrap .ag-row { background: var(--bg-0); border-color: var(--line); }
-.gridwrap .ag-row-odd { background: var(--bg-0); }
+.gridwrap .ag-body-viewport, .gridwrap .ag-center-cols-viewport, .gridwrap .ag-center-cols-container { background: var(--bg-0); }
+.gridwrap .ag-row { background: var(--bg-0); border-bottom: var(--hair); }
+.gridwrap .ag-row-odd { background: var(--bg-1); }
 .gridwrap .ag-row-hover::before, .gridwrap .ag-row:hover { background: var(--grid-hover); }
 .gridwrap .ag-cell { font-variant-numeric: tabular-nums; }
 .gridwrap .ag-paging-panel { border-top: var(--hair); color: var(--ink-1); font-size: var(--step--1); }
