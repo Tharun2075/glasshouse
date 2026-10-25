@@ -1,0 +1,14 @@
+import { appeals } from "@/lib/ledger.ts";
+import { currentUser } from "@/lib/session.ts";
+import DonateForm from "@/components/DonateForm.tsx";
+export const dynamic = "force-dynamic";
+export default async function Donate({ searchParams }: { searchParams: Promise<{ cancelled?: string; error?: string }> }) {
+  const sp = await searchParams, u = await currentUser();
+  return (<>
+    <h1>Give to Northside Food Bank</h1>
+    <p className="lede">You pay through PayPal (sandbox). Afterwards you get a link showing exactly which receipts your gift paid for.</p>
+    {sp.cancelled && <p className="note" role="status">Payment cancelled. Nothing was charged.</p>}
+    {sp.error && <p className="note err" role="alert">{sp.error}</p>}
+    <DonateForm appeals={appeals()} donorName={u?.name ?? "Anonymous"} />
+  </>);
+}

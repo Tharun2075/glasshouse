@@ -1,0 +1,1 @@
+{ "name": "sharp", "version": "0.0.0-stub", "license": "MIT", "description": "Empty stub: keeps LGPL libvips out of the tree. next/image runs with images.unoptimized.", "main": "index.js" }

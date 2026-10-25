@@ -1,0 +1,148 @@
+{
+ "26bfe318605a5951c08b717eda647cc4763e7604f12fd8b648ae84b342437f3a": {
+  "vendor": "Greenfield Wholesale Foods",
+  "date": "2026-09-08",
+  "amount": 40.0,
+  "currency": "USD",
+  "category": "Food",
+  "line_items": [
+   {
+    "description": "Rice 10 kg x2",
+    "amount": 18.0
+   },
+   {
+    "description": "Lentils 5 kg x2",
+    "amount": 22.0
+   }
+  ],
+  "confidence": 0.94
+ },
+ "752e341910760fc6d195e2ff994d679e7e0c4ae5b2d2281cd0ed5ac9e380101c": {
+  "vendor": "Greenfield Wholesale Foods",
+  "date": "2026-09-15",
+  "amount": 55.0,
+  "currency": "USD",
+  "category": "Food",
+  "line_items": [
+   {
+    "description": "Tinned tomatoes x24",
+    "amount": 21.0
+   },
+   {
+    "description": "Pasta 5 kg x4",
+    "amount": 34.0
+   }
+  ],
+  "confidence": 0.94
+ },
+ "2c186eefb8a028f7054e73204d54c6c126aa02ea6f505d12b59beb6a03f4e6c0": {
+  "vendor": "Riverside Cash and Carry",
+  "date": "2026-09-22",
+  "amount": 60.0,
+  "currency": "USD",
+  "category": "Food",
+  "line_items": [
+   {
+    "description": "Cooking oil 5 L x3",
+    "amount": 33.0
+   },
+   {
+    "description": "Oats 3 kg x6",
+    "amount": 27.0
+   }
+  ],
+  "confidence": 0.94
+ },
+ "342f2d666bb9e952d75f10afd028efd8bcd9c4874f18d25b1710839aa8abe950": {
+  "vendor": "Hearth Kitchen Supply",
+  "date": "2026-09-25",
+  "amount": 120.0,
+  "currency": "USD",
+  "category": "Equipment",
+  "line_items": [
+   {
+    "description": "Stock pot 40 L",
+    "amount": 85.0
+   },
+   {
+    "description": "Ladles x5",
+    "amount": 35.0
+   }
+  ],
+  "confidence": 0.94
+ },
+ "5385d46978359df259713184380ab8818e4f11df9d1fb1b9c2f984cedd834614": {
+  "vendor": "Northgate Fuel Stop",
+  "date": "2026-10-01",
+  "amount": 35.0,
+  "currency": "USD",
+  "category": "Fuel",
+  "line_items": [
+   {
+    "description": "Diesel 21.9 L",
+    "amount": 35.0
+   }
+  ],
+  "confidence": 0.94
+ },
+ "4d5479a89825a1b098fe1d91f66c660c62102a519b45edd08c37cdafb7e11b65": {
+  "vendor": "Northgate Fuel Stop",
+  "date": "2026-10-01",
+  "amount": 35.0,
+  "currency": "USD",
+  "category": "Fuel",
+  "line_items": [
+   {
+    "description": "Diesel 21.9 L",
+    "amount": 35.0
+   }
+  ],
+  "confidence": 0.94
+ },
+ "6de8dcdd148b585c50ecd59cc15aeb15a00e8dfc5fdf1a3a011bb1a0883d138b": {
+  "vendor": "Bulkway Provisions",
+  "date": "2026-10-06",
+  "amount": 480.0,
+  "currency": "USD",
+  "category": "Food",
+  "line_items": [
+   {
+    "description": "Mixed pallet dry goods",
+    "amount": 480.0
+   }
+  ],
+  "confidence": 0.94
+ },
+ "5178362abe0b5f181680bda7b324f3d7e65316341428023f6d9f0ea44f65caba": {
+  "vendor": "Hearth Kitchen Supply",
+  "date": "2026-10-12",
+  "amount": 310.0,
+  "currency": "USD",
+  "category": "Equipment",
+  "line_items": [
+   {
+    "description": "Chest freezer 200 L",
+    "amount": 310.0
+   }
+  ],
+  "confidence": 0.94
+ },
+ "75c7a987426978158d7b7ab65cd6310f115e80e69f6b5bec61638c294b6dcef5": {
+  "vendor": "Corner Market Co-op",
+  "date": "2026-10-20",
+  "amount": 42.5,
+  "currency": "USD",
+  "category": "Food",
+  "line_items": [
+   {
+    "description": "Fresh vegetables",
+    "amount": 28.5
+   },
+   {
+    "description": "Bread loaves x8",
+    "amount": 14.0
+   }
+  ],
+  "confidence": 0.94
+ }
+}

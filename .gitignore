@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.env.local
+.env*.local
+data/*.db
+data/*.db-*
+work/
+next-env.d.ts
+*.tsbuildinfo
+__pycache__/
+data/receipts/up-*
