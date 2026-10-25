@@ -60,3 +60,8 @@ table.plain { border-collapse: collapse; width: 100%; background: var(--surface)
 @media (max-width: 640px) { .cta-row .btn { width: 100%; text-align: center; min-height: 44px; } .trace-form input { flex: 1; } }
 .vendor-cell { line-height: 1.4; padding: 10px 0; white-space: normal; } .vendor-cell .why { display: none; }
 @media (max-width: 640px) { .vendor-cell .why { display: block; font-size: 13px; font-weight: 600; color: var(--held); } }
+.chips { display: flex; gap: 8px; margin-bottom: 8px; }
+button.chip { background: var(--surface); color: var(--accent); min-width: 64px; min-height: 44px; } button.chip.on { background: var(--accent); color: var(--surface); }
+ol.steps { list-style: none; counter-reset: s; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; padding: 0; margin: 0 0 16px; max-width: 720px; }
+ol.steps li { counter-increment: s; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; }
+ol.steps li strong::before { content: counter(s) ". "; color: var(--accent); } ol.steps li span { color: var(--muted); font-size: 14px; }

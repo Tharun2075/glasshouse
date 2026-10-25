@@ -7,6 +7,11 @@ export default async function Donate({ searchParams }: { searchParams: Promise<{
   return (<>
     <h1>Give to Northside Food Bank</h1>
     <p className="lede">You pay through PayPal (sandbox). Afterwards you get a link showing exactly which receipts your gift paid for.</p>
+    <ol className="steps" aria-label="What happens next">
+      <li><strong>Pay</strong><span>with PayPal (sandbox)</span></li>
+      <li><strong>Get your trace link</strong><span>shown right after paying</span></li>
+      <li><strong>See the receipts</strong><span>your dollars paid for, as they come in</span></li>
+    </ol>
     {sp.cancelled && <p className="note" role="status">Payment cancelled. Nothing was charged.</p>}
     {sp.error && <p className="note err" role="alert">{sp.error}</p>}
     <DonateForm appeals={appeals()} donorName={u?.name ?? "Anonymous"} />
