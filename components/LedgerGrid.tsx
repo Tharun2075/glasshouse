@@ -38,7 +38,7 @@ const NARROW_HIDE = ["id", "date", "category", "reason", "payout", "receipt"];
 function fit(a: GridApi<Row>) {
   const wide = typeof window === "undefined" || window.innerWidth > 640;
   a.setColumnsVisible(NARROW_HIDE, wide);
-  a.setColumnWidths([{ key: "amount", newWidth: wide ? 130 : 96 }, { key: "status", newWidth: wide ? 120 : 92 }]);
+  a.setColumnWidths([{ key: "amount", newWidth: wide ? 130 : 92 }, { key: "status", newWidth: wide ? 120 : 108 }]);
 }
 
 export default function LedgerGrid({ data }: { data: Data }) {
@@ -65,12 +65,12 @@ export default function LedgerGrid({ data }: { data: Data }) {
     { field: "vendor" as any, headerName: "Vendor", flex: 1, minWidth: 120, filter: "agTextColumnFilter", autoHeight: true,
       cellRenderer: (p: any) => (<div className="vendor-cell">{p.value}{p.data?.status === "held" && p.data.reason && <span className="why">{p.data.reason}</span>}</div>) },
     { field: "category" as any, headerName: "Category", width: 120, filter: "agTextColumnFilter" },
-    { field: "amount" as any, headerName: "Amount", width: 130, filter: "agNumberColumnFilter", type: "rightAligned", valueFormatter: (p) => (p.value == null ? "" : money(p.value)),
+    { field: "amount" as any, headerName: "Amount", width: 130, filter: "agNumberColumnFilter", type: "rightAligned", cellClass: ["ag-right-aligned-cell", "c-tight"], valueFormatter: (p) => (p.value == null ? "" : money(p.value)),
       cellClassRules: { "mono": () => true } },
-    { field: "status" as any, headerName: "Status", width: 120, filter: "agTextColumnFilter", filterParams: { maxNumConditions: 5 }, cellRenderer: (p: any) => p.value ? <StatusChip status={p.value} /> : null },
+    { field: "status" as any, headerName: "Status", width: 120, cellClass: "c-tight", filter: "agTextColumnFilter", filterParams: { maxNumConditions: 5 }, cellRenderer: (p: any) => p.value ? <StatusChip status={p.value} /> : null },
     { field: "reason" as any, headerName: "Why held / flags", flex: 1, minWidth: 180, tooltipField: "reason" as any },
     { field: "payout" as any, headerName: "Payout batch", flex: 1, minWidth: 160, tooltipField: "payout" as any },
-    { field: "receipt" as any, headerName: "Receipt", flex: 1, minWidth: 120, sortable: false, filter: false, cellRenderer: (p: any) => !p.value ? null
+    { field: "receipt" as any, headerName: "Receipt", flex: 1, minWidth: 156, sortable: false, filter: false, cellRenderer: (p: any) => !p.value ? null
       : p.data.status === "approved" || p.data.status === "paid" ? <a className="receipt-link" href={p.value} target="_blank" rel="noreferrer"><FileText className="icon" aria-hidden size={16} />View receipt</a> : <span className="reader"><Hourglass className="icon" aria-hidden size={14} />After review</span> },
   ], []);
 

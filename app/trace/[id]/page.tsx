@@ -19,7 +19,7 @@ export default async function Trace({ params }: { params: Promise<{ id: string }
     <ol className="timeline" aria-label="Path of this gift">
       <li className="rise d1">
         <span className="node" aria-hidden><Heart className="icon" size={22} /></span>
-        <div className="step"><span className="k">Gift received</span><h3>{t.donation.donor_name} gave <span className="mono">${fmt(t.donation.amount_cents)}</span></h3>
+        <div className="step"><span className="k">Gift received</span><h2 className="h3">{t.donation.donor_name} gave <span className="mono">${fmt(t.donation.amount_cents)}</span></h2>
           <p className="muted">To {t.appeal.title}.</p></div>
       </li>
       {t.rows.map((r, i) => {

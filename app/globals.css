@@ -180,7 +180,7 @@ table.plain td.c-vendor { font-weight: 650; }
 .timeline .node.held { background: var(--held-bg); color: var(--held); border-color: color-mix(in oklab, var(--held) 25%, transparent); }
 .timeline .step { padding-top: 10px; }
 .timeline .step > .k { color: var(--muted); font-size: 14px; font-weight: 600; }
-.timeline .step > h3 { margin: 2px 0 4px; }
+.timeline .step > h2.h3 { font-size: var(--step-1); font-weight: 680; margin: 2px 0 4px; }
 .trace-row { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 20px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; margin: 8px 0 0; box-shadow: var(--shadow); }
 .trace-row img { width: 200px; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--r-sm); display: block; transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease); }
 .trace-row a:hover img { transform: scale(1.02) rotate(-.5deg); box-shadow: var(--shadow-lift); }
@@ -257,7 +257,7 @@ footer.site .sandbox { display: inline-flex; gap: 8px; align-items: center; }
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; gap: 28px; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .split { grid-template-columns: 1fr; }
+  .split { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 640px) {
   main { padding: 20px 16px 48px; }
@@ -294,7 +294,7 @@ footer.site .sandbox { display: inline-flex; gap: 8px; align-items: center; }
   table.cardtable td.c-action { display: block; margin-top: 10px; } table.cardtable td.c-action button { width: 100%; min-height: 44px; }
   /* F1: phone header stays on one row; the nav scrolls sideways instead of wrapping */
   header.top { flex-wrap: nowrap; gap: 8px; padding: 8px 12px; }
-  header.top .brand { font-size: 16px; flex: none; gap: 8px; }
+  header.top .brand { font-size: 16px; flex: none; gap: 8px; min-width: 44px; min-height: 44px; justify-content: center; }
   header.top .brand .word { display: none; }
   header.top nav { flex-wrap: nowrap; overflow-x: auto; min-width: 0; gap: 2px; white-space: nowrap; scrollbar-width: none; }
   header.top nav a { padding: 10px 10px; font-size: 14px; }
@@ -305,4 +305,12 @@ footer.site .sandbox { display: inline-flex; gap: 8px; align-items: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
+}
+
+/* ledger: chips and amounts keep their full text in narrow phone columns */
+.ag-cell.c-tight { padding-left: 8px; padding-right: 8px; }
+@media (max-width: 640px) {
+  table.plain td, table.plain th { padding-left: 10px; padding-right: 10px; }
+  table.plain td.mono { font-size: 13px; }
+  .grid-toggle { width: 40px; height: 40px; }
 }
