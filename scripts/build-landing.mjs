@@ -14,6 +14,6 @@ rmSync(dest, { recursive: true, force: true });
 cpSync(out, dest, { recursive: true, filter: (f) => !/\.(br|gz)$/.test(f) });
 // index.html is served at "/", so relative "./" and root "/img/" URLs must point into /landing/.
 const html = join(dest, "index.html");
-const site = (process.env.SITE_URL ?? "http://localhost:3000").replace(/\/$/, ""); // og:image must be an absolute URL
+const site = (process.env.SITE_URL ?? "https://glasshouse-1a5k.onrender.com").replace(/\/$/, ""); // og:image must be an absolute URL
 writeFileSync(html, readFileSync(html, "utf8").replace(/(["\s,])\.\//g, "$1/landing/").replace(/(["\s,])\/img\//g, "$1/landing/img/").replace(/content="(?:\/landing)?\/og\.png"/g, `content="${site}/og.png"`));
 console.log(`build:landing: copied ${out} -> ${dest}`);

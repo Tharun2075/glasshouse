@@ -12,9 +12,9 @@ const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", displ
 const title = "Glasshouse — every dollar, in the open";
 const description = "A transparent ledger for small charities. Sandbox demo.";
 const og = { url: "/og.png", width: 1200, height: 630, alt: "Glasshouse: a glass house holding a charity's ledger" };
-// SITE_URL makes og:image absolute on the deployed site; localhost is the dev default.
+// SITE_URL makes og:image absolute on the deployed site; the live Render URL is the default (env overrides).
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(process.env.SITE_URL ?? "https://glasshouse-1a5k.onrender.com"),
   title, description,
   openGraph: { title, description, type: "website", images: [og] },
   twitter: { card: "summary_large_image", title, description, images: [og.url] },
