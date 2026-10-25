@@ -23,5 +23,6 @@ cpSync(out, dest, { recursive: true, filter: (f) => !/\.(br|gz)$/.test(f) });
 // index.html is served at "/", so relative "./" and root "/img/" URLs must point into /landing/.
 const html = join(dest, "index.html");
 const site = (process.env.SITE_URL ?? "https://glasshouse-1a5k.onrender.com").replace(/\/$/, ""); // og:image must be an absolute URL
-writeFileSync(html, readFileSync(html, "utf8").replace(/(["\s,])\.\//g, "$1/landing/").replace(/(["\s,])\/img\//g, "$1/landing/img/").replace(/content="(?:\/landing)?\/og\.png"/g, `content="${site}/og.png"`).replace(/<html(?![^>]*data-theme)/, '<html data-theme="dark"'));
+writeFileSync(html, readFileSync(html, "utf8").replace(/(["\s,])\.\//g, "$1/landing/").replace(/(["\s,])\/img\//g, "$1/landing/img/").replace(/content="(?:\/landing)?\/og\.png"/g, `content="${site}/og.png"`));
+// No data-theme here: the landing's own head script picks it (stored gh-theme, else the OS scheme).
 console.log(`build:landing: copied ${out} -> ${dest}`);
