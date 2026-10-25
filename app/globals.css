@@ -39,3 +39,18 @@ table.plain { border-collapse: collapse; width: 100%; background: var(--surface)
 .row-paid .ag-cell[col-id="status"] { color: var(--paid); }
 @media (max-width: 600px) { main { padding: 16px; } .trace-row { grid-template-columns: 1fr; } .gridwrap { height: 480px; } }
 .big { font-size: 22px; font-weight: 700; }
+.pill.mismatch, .pill.MISMATCH { background: var(--rejected-bg); color: var(--rejected); }
+.actions { display: grid; gap: 4px; }
+/* Phone: each table row becomes a card; labels come from data-label (D2). */
+@media (max-width: 640px) {
+  table.cardtable, table.cardtable tbody, table.cardtable tr, table.cardtable td { display: block; width: 100%; }
+  table.cardtable { background: transparent; }
+  table.cardtable thead { position: absolute; left: -9999px; }
+  table.cardtable tr { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin: 0 0 12px; }
+  table.cardtable td { border: 0; padding: 2px 0; display: flex; gap: 8px; }
+  table.cardtable td::before { content: attr(data-label); color: var(--muted); min-width: 72px; font-size: 14px; }
+  table.cardtable td.c-empty { display: none; }
+  table.cardtable td.c-vendor { font-weight: 700; font-size: 18px; } table.cardtable td.c-vendor::before, table.cardtable td.c-action::before { content: none; }
+  table.cardtable td.c-amount { font-size: 18px; } table.cardtable td.c-reason { font-weight: 600; }
+  table.cardtable td.c-action { display: block; margin-top: 8px; } table.cardtable td.c-action button { width: 100%; min-height: 44px; }
+}
