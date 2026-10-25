@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "next dev -p ${PORT:-3000}",
     "build": "next build",
+    "build:landing": "node scripts/build-landing.mjs",
     "start": "next start -p ${PORT:-3000}",
     "seed": "node --experimental-strip-types scripts/seed.ts",
     "test": "vitest run tests/unit",

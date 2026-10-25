@@ -9,3 +9,5 @@ next-env.d.ts
 *.tsbuildinfo
 __pycache__/
 data/receipts/up-*
+.env
+AGENTS.md

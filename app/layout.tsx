@@ -9,7 +9,16 @@ import Footer from "@/components/Footer.tsx";
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
-export const metadata: Metadata = { title: "Glasshouse — every dollar, in the open", description: "A transparent ledger for small charities. Sandbox demo." };
+const title = "Glasshouse — every dollar, in the open";
+const description = "A transparent ledger for small charities. Sandbox demo.";
+const og = { url: "/og.png", width: 1200, height: 630, alt: "Glasshouse: a glass house holding a charity's ledger" };
+// SITE_URL makes og:image absolute on the deployed site; localhost is the dev default.
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
+  title, description,
+  openGraph: { title, description, type: "website", images: [og] },
+  twitter: { card: "summary_large_image", title, description, images: [og.url] },
+};
 // themeColor values are the lock's --bg for light and dark (brand-tokens/tokens.css).
 export const viewport: Viewport = { colorScheme: "light dark", themeColor: [{ media: "(prefers-color-scheme: light)", color: "#F6F7FB" }, { media: "(prefers-color-scheme: dark)", color: "#0E1022" }] };
 export const dynamic = "force-dynamic";
@@ -19,7 +28,7 @@ const THEME_JS = `try{var t=localStorage.getItem("gh-theme");if(t==="light"||t==
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const u = await currentUser();
-  const links = [{ href: "/", label: "Public ledger" }, { href: "/donate", label: "Donate" }];
+  const links = [{ href: "/ledger", label: "Public ledger" }, { href: "/donate", label: "Donate" }];
   if (u?.role === "volunteer") links.push({ href: "/volunteer", label: "Upload receipt" });
   if (u?.role === "trustee") links.push({ href: "/trustee", label: "Approvals" });
   return (

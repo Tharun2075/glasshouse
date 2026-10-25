@@ -1,5 +1,9 @@
 # Glasshouse
 
+[![Glasshouse: the glass house, rendered in Blender](docs/media/turntable-still.jpg)](docs/media/turntable.mp4)
+
+_7-second turntable of the Blender model: [MP4](docs/media/turntable.mp4) · [WebM](docs/media/turntable.webm)._
+
 Glasshouse is a glass-walled ledger for small charities: donors give through PayPal, volunteers upload receipts, and trustees approve each spend before a PayPal payout goes out.
 Every donation is matched first-in-first-out to the spends it paid for, so any donor can open "where did my $25 go?" and see the exact receipts.
 Spends that look like duplicates, go over an appeal's per-item cap, or run above 3x the appeal's rolling mean are held in amber and never paid.

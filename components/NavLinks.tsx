@@ -7,7 +7,7 @@ export default function NavLinks({ links }: { links: { href: string; label: stri
   return (
     <nav aria-label="Main">
       {links.map((l) => {
-        const on = l.href === "/" ? path === "/" : path.startsWith(l.href);
+        const on = path.startsWith(l.href);
         return <a key={l.href} href={l.href} aria-current={on ? "page" : undefined}>{l.label}</a>;
       })}
     </nav>

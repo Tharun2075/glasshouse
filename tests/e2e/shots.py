@@ -7,8 +7,8 @@ from playwright.sync_api import sync_playwright
 URL = os.environ["URL"].rstrip("/")
 OUT = os.environ.get("OUT", "/work/out")
 AXE = open(os.environ.get("AXE", os.path.join(os.path.dirname(__file__), "../../node_modules/axe-core/axe.min.js"))).read()
-TRACE = os.environ.get("TRACE_ID", "1")
-PAGES = [(None, "home", "/"), (None, "login", "/login"), (None, "trace", f"/trace/{TRACE}"),
+TRACE = os.environ.get("TRACE_ID", "12")
+PAGES = [(None, "landing", "/"), (None, "ledger", "/ledger"), (None, "login", "/login"), (None, "trace", f"/trace/{TRACE}"),
          ("donor@northside.test", "donate", "/donate"), ("volunteer@northside.test", "volunteer", "/volunteer"),
          ("trustee@northside.test", "trustee", "/trustee")]
 os.makedirs(OUT, exist_ok=True)

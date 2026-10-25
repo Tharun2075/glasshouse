@@ -37,7 +37,7 @@ code { background: var(--tint); padding: 1px 6px; border-radius: 6px; font-size:
 
 /* Header: sticky glass bar */
 header.top { position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; padding: 12px max(24px, calc((100vw - 1200px) / 2)); border-bottom: 1px solid color-mix(in oklab, var(--line) 70%, transparent); background: var(--glass); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); }
-header.top .brand { display: flex; gap: 10px; align-items: center; font-weight: 750; letter-spacing: -.02em; color: var(--ink); text-decoration: none; font-size: 19px; }
+header.top .brand { display: flex; gap: 10px; align-items: center; font-weight: 600; letter-spacing: -.02em; color: var(--ink); text-decoration: none; font-size: 20px; }
 header.top nav { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
 header.top nav a { text-decoration: none; color: var(--muted); font-weight: 550; font-size: 15px; padding: 8px 12px; border-radius: 999px; transition: background var(--dur) var(--ease), color var(--dur) var(--ease); }
 header.top nav a:hover { color: var(--ink); background: color-mix(in oklab, var(--tint) 80%, transparent); }
@@ -301,7 +301,8 @@ footer.site .sandbox { display: inline-flex; gap: 8px; align-items: center; }
   header.top nav { flex-wrap: nowrap; overflow-x: auto; min-width: 0; gap: 2px; white-space: nowrap; scrollbar-width: none; }
   header.top nav a { padding: 10px 10px; font-size: 14px; }
   header.top .who { flex: none; gap: 4px; }
-  header.top .who span { display: none; }
+  header.top .who > span { display: none; }
+  header.top .who button.theme-toggle { padding: 0; }
   header.top .who > a { padding: 8px 12px; }
   header.top .who button.ghost { padding: 8px 12px; }
 }
@@ -336,3 +337,7 @@ footer.site .sandbox { display: inline-flex; gap: 8px; align-items: center; }
   .gridwrap { display: none; } .ledger-cards { display: block; }
   footer.site nav { gap: 8px 20px; } footer.site a { min-width: 44px; justify-content: center; padding: 0 4px; }
 }
+
+/* the one page transition: soft crossfade between the landing and app pages (same rule in the landing) */
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
