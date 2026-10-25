@@ -33,9 +33,18 @@ with sync_playwright() as p:
             html = page.content()
             watermark = "ag-watermark" in html or "For Development Purposes Only" in html
             grid = page.locator(".ag-root").count()
-            ok = not errors and not v and not watermark and page.url.startswith(URL + path.split("?")[0])
+            extra = {}
+            if name == "trustee":
+                # Phone + desktop: the pending spend's Approve button and a held spend's reason must be on screen, not clipped.
+                for tid, label in (("spend-8", "approve"), ("spend-7", "held")):
+                    row = page.locator(f"[data-testid={tid}]"); row.scroll_into_view_if_needed()
+                    page.screenshot(path=f"{OUT}/trustee-{label}-{vw}x{vh}.png")
+                    tgt = row.get_by_role("button", name="Approve") if label == "approve" else row.locator(".c-reason")
+                    bb = tgt.bounding_box() if tgt.count() else None
+                    extra[label] = bool(bb) and tgt.is_visible() and bb["x"] >= 0 and bb["x"] + bb["width"] <= vw
+            ok = not errors and not v and not watermark and page.url.startswith(URL + path.split("?")[0]) and all(extra.values())
             fails += not ok
             print(json.dumps({"page": name, "viewport": f"{vw}x{vh}", "result": "PASS" if ok else "FAIL", "url": page.url[len(URL):],
-                              "console_errors": errors[:3], "axe_serious_critical": v, "watermark": watermark, "ag_grid": grid, "shot": os.path.basename(shot)}), flush=True)
+                              "console_errors": errors[:3], "axe_serious_critical": v, "watermark": watermark, "ag_grid": grid, "on_screen": extra, "shot": os.path.basename(shot)}), flush=True)
             ctx.close()
 sys.exit(1 if fails else 0)

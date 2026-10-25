@@ -31,8 +31,13 @@ function GroupRow(p: { data: Extract<Row, { kind: "group" }>; context: { open: S
 }
 
 // Phones: keep Vendor, Amount, Status and the hold reason; hide the rest so the reason is on screen at 390px.
-const NARROW_HIDE = ["id", "date", "category", "payout", "receipt"];
-function fit(a: GridApi<Row>) { a.setColumnsVisible(NARROW_HIDE, typeof window === "undefined" || window.innerWidth > 640); }
+const NARROW_HIDE = ["id", "date", "category", "reason", "payout", "receipt"];
+// Phones keep Vendor, Amount, Status only, narrowed so all three fit a 390px screen without sideways scroll.
+function fit(a: GridApi<Row>) {
+  const wide = typeof window === "undefined" || window.innerWidth > 640;
+  a.setColumnsVisible(NARROW_HIDE, wide);
+  a.setColumnWidths([{ key: "amount", newWidth: wide ? 130 : 96 }, { key: "status", newWidth: wide ? 120 : 92 }]);
+}
 
 export default function LedgerGrid({ data }: { data: Data }) {
   const api = useRef<GridApi<Row> | null>(null);
@@ -51,7 +56,7 @@ export default function LedgerGrid({ data }: { data: Data }) {
   const cols = useMemo<ColDef<Row>[]>(() => [
     { field: "id" as any, headerName: "#", width: 70, filter: "agNumberColumnFilter" },
     { field: "date" as any, headerName: "Date", width: 120, filter: "agDateColumnFilter", sort: undefined },
-    { field: "vendor" as any, headerName: "Vendor", flex: 1, minWidth: 160, filter: "agTextColumnFilter" },
+    { field: "vendor" as any, headerName: "Vendor", flex: 1, minWidth: 120, filter: "agTextColumnFilter" },
     { field: "category" as any, headerName: "Category", width: 140, filter: "agTextColumnFilter" },
     { field: "amount" as any, headerName: "Amount", width: 130, filter: "agNumberColumnFilter", type: "rightAligned", valueFormatter: (p) => (p.value == null ? "" : money(p.value)),
       cellClassRules: { "mono": () => true } },
