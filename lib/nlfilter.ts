@@ -16,7 +16,7 @@ export const Intent = z.object({
   date_from: z.string().regex(ISO).nullable(), date_to: z.string().regex(ISO).nullable(),
 });
 export type Intent = z.infer<typeof Intent>;
-export type NlOpts = { today?: string; appeals?: string[] };
+export type NlOpts = { today?: string; appeals?: string[]; rulesOnly?: boolean };
 const nullable = (t: string) => ({ type: [t, "null"] });
 // The API rejects an enum under a type array (live 400, 2026-10-25), so nullable enums use anyOf.
 export const SCHEMA = { type: "object", additionalProperties: false,
@@ -147,7 +147,7 @@ export function filterPrompt(q: string, today: string, appeals: string[]) {
 type Client = { messages: { create(b: any): Promise<any> } };
 export async function nlToFilter(q: string, client?: Client, opts: NlOpts = {}) {
   const today = opts.today ?? iso(new Date()), appeals = opts.appeals ?? [];
-  if (!client && !process.env.ANTHROPIC_API_KEY) { const intent = ruleIntent(q, { today, appeals }); return { by: "rules", intent, model: toFilterModel(intent) }; }
+  if (opts.rulesOnly || (!client && !process.env.ANTHROPIC_API_KEY)) { const intent = ruleIntent(q, { today, appeals }); return { by: "rules", intent, model: toFilterModel(intent) }; }
   if (!client) { const { default: Anthropic } = await import("@anthropic-ai/sdk"); client = new Anthropic(anthropicOptions()) as any; }
   const msg = await client!.messages.create({ model: MODEL, max_tokens: 512, output_config: { format: { type: "json_schema", schema: SCHEMA } },
     messages: [{ role: "user", content: filterPrompt(q, today, appeals) }] });

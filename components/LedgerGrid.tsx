@@ -81,7 +81,7 @@ export default function LedgerGrid({ data }: { data: Data }) {
     const b = await r.json();
     if (!r.ok) { setNlMsg(b.error); return; }
     api.current?.setFilterModel(b.model);
-    setNlMsg(`Applied filter (${b.by}): ${JSON.stringify(b.model)}`);
+    setNlMsg(`${b.limit_note ? `${b.limit_note}. ` : ""}Applied filter (${b.by}): ${JSON.stringify(b.model)}`);
   }
 
   return (<div>

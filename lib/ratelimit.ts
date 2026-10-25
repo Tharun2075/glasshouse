@@ -10,7 +10,9 @@ const limiters = new Map<string, RateLimiterMemory>();
 export const clientIp = (req: Request): string | null => {
   if (process.env.TRUST_PROXY !== "1") return null;
   const hops = req.headers.get("x-forwarded-for")?.split(",").map((h) => h.trim()).filter(Boolean) ?? [];
-  return hops.at(-1) || req.headers.get("x-real-ip") || null;
+  // TRUST_PROXY_HOPS = extra proxies of our own that append after the client hop (0 = the rightmost hop is the client)
+  const skip = Math.max(0, Math.floor(Number(process.env.TRUST_PROXY_HOPS ?? 0)) || 0);
+  return hops.at(-1 - skip) || req.headers.get("x-real-ip") || null;
 };
 
 /** Returns a 429 Response when the caller is over `points` per `seconds`, else null. */
