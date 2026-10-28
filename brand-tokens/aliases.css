@@ -39,7 +39,7 @@
   --space-5: 2.5rem; --space-6: 4rem; --space-7: 6.5rem; --space-8: 10rem;
   --section-y: clamp(3rem, 2rem + 4vw, 6rem);
   --gutter: clamp(1.25rem, 0.6rem + 3.2vw, 4.5rem);
-  --container: 1280px;
+  --container: max(1280px, 66.667vw); /* r7 M3: grows past 1920 px wide (2560 at 4K), with the root font size */
   --header-h: 4.5rem;
   --hair: 1px solid var(--line);
 
