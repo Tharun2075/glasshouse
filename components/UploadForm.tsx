@@ -17,7 +17,7 @@ export default function UploadForm({ appeals }: { appeals: { id: number; title: 
       <p className="muted tight">No receipt handy? <a href="/sample-receipt.png" download="sample-receipt.png">Download a sample receipt to try</a>, then pick it below.</p>
       <label htmlFor="receipt">Receipt image (PNG, under 5 MB)</label>
       <input id="receipt" name="receipt" type="file" accept="image/png" required />
-      <button type="submit" disabled={busy}>{busy ? "Reading receipt…" : "Upload and read"}</button>
+      <button type="submit" disabled={busy} data-track="submit-receipt">{busy ? "Reading receipt…" : "Upload and read"}</button>
     </form>
     {res?.error && <p className="err" role="alert">{res.error}</p>}
     {res?.spend && (<div className="panel result rise" role="status">

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function Volunteer() {
   const u = await currentUser();
   if (!u || u.role !== "volunteer") redirect("/login");
-  return (<section>
+  return (<section data-track-section="volunteer">
     <div className="hero rise"><p className="eyebrow">Volunteer · upload a receipt</p><h1>Prove the <em>spend</em>.</h1>
     <p className="lede">Claude reads the receipt and fills in the details (without an AI key, a demo reader is used and the spend says so). Nothing is paid automatically: every spend waits for a trustee.</p></div>
     <div className="split rise d1">

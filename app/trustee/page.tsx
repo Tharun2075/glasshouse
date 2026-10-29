@@ -33,7 +33,7 @@ export default async function Trustee() {
       <td data-label="Action" className="c-action"><SpendActions id={s.id} status={s.status} payout={s.payout ? { batch_id: s.payout.batch_id, status: s.payout.status } : null} /></td>
     </tr>{why && s.hold_reason && <tr className="why-row row-held" data-testid={`spend-${s.id}-why`}><td colSpan={8}><span className="reason"><ShieldAlert className="icon" aria-hidden size={16} />Why held: {s.hold_reason}</span></td></tr>}</Fragment>))}</tbody>
   </table>);
-  return (<section>
+  return (<section data-track-section="trustee">
     <div className="hero rise"><p className="eyebrow">Trustee · approvals</p><h1>Decide what <em>moves</em>.</h1>
       <p className="lede">Approving a spend sends exactly one PayPal sandbox payout. Held spends cannot be paid.</p></div>
     <ul className="stats rise d1">

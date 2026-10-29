@@ -14,6 +14,6 @@ export default async function Donate({ searchParams }: { searchParams: Promise<{
     </ol>
     {sp.cancelled && <p className="note" role="status">Payment cancelled. Nothing was charged.</p>}
     {sp.error && <p className="note err" role="alert">{sp.error}</p>}
-    <div className="panel rise d1"><DonateForm appeals={appeals()} donorName={u?.name ?? "Anonymous"} /></div>
+    <div className="panel rise d1" data-track-section="donate-form"><DonateForm appeals={appeals()} donorName={u?.name ?? "Anonymous"} /></div>
   </>);
 }

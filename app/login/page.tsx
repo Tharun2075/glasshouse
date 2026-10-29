@@ -8,9 +8,9 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
     <form className="stack" method="post" action="/api/auth/login">
       <label htmlFor="email">Email</label><input id="email" name="email" type="email" autoComplete="username" required defaultValue={sp.email ?? ""} autoFocus={!sp.error} />
       <label htmlFor="password">Password</label><input id="password" name="password" type="password" autoComplete="current-password" required autoFocus={!!sp.error} />
-      <p><button type="submit" className="btn lg">Sign in</button></p>
+      <p><button type="submit" className="btn lg" data-track="sign-in">Sign in</button></p>
     </form></div>
-    <div className="panel"><h2>Judges: use these demo logins (sandbox only)</h2>
+    <div className="panel" data-track-section="demo-logins"><h2>Judges: use these demo logins (sandbox only)</h2>
     <table className="plain"><thead><tr><th>Role</th><th>Email</th></tr></thead><tbody>
       <tr><td>Donor</td><td className="mono">donor@northside.test</td></tr>
       <tr><td>Volunteer</td><td className="mono">volunteer@northside.test</td></tr>

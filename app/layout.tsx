@@ -47,6 +47,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </div></header>
         <main id="main">{children}</main>
         <Footer />
+        {/* Cookieless visit counter (no IP/UA/cookies stored): views, data-track-section, data-track. */}
+        <script defer src="https://thatched-tools.pages.dev/t.js" data-site="glasshouse"></script>
       </body>
     </html>
   );

@@ -57,20 +57,20 @@
   <nav class="site-nav" aria-label="Primary"><ul><li><a href="#how">How it works</a></li><li><a href="/ledger">Ledger</a></li><li><a href="https://github.com/Tharun2075/glasshouse" rel="noopener">GitHub</a></li></ul></nav>
   <a class="btn btn--ghost btn--sm" href="/donate">Give</a>
 </div></header>
-    <main id="main" tabindex="-1"><section class="s s--hero" id="top" aria-label="A charity ledger you can see through." data-scene><div class="wrap hero__inner">
+    <main id="main" tabindex="-1"><section class="s s--hero" id="top" data-track-section="top" aria-label="A charity ledger you can see through." data-scene><div class="wrap hero__inner">
   <div class="hero__stage" data-hero-media aria-hidden="true"></div>
   <div class="hero__copy">
   <p class="eyebrow mono" data-hero>Sandbox demo · Northside Food Bank</p>
   <h1 class="hero__title" data-reveal="hero">A charity ledger you can <em>see through</em>.</h1>
   <p class="hero__lede">Every gift lands in the open. Every spend needs a receipt. Claude reads each one and holds anything that looks wrong before a trustee pays it out through PayPal.</p>
   <div class="hero__actions" data-hero>
-    <div class="magnet"><a class="btn btn--primary" href="/ledger"><span>Open the live ledger</span></a></div>
+    <div class="magnet"><a class="btn btn--primary" data-track="hero-primary" href="/ledger"><span>Open the live ledger</span></a></div>
     <a class="btn btn--ghost" href="/trace/12">Trace a gift</a>
   </div>
   <p class="hero__note mono" data-hero>PayPal sandbox · no real money moves</p>
   </div>
 </div></section>
-<section class="s s--video" id="demo" aria-label="Watch the 90-second demo."><div class="wrap video">
+<section class="s s--video" id="demo" data-track-section="demo" aria-label="Watch the 90-second demo."><div class="wrap video">
   <p class="eyebrow mono">Demo · 1:31</p>
   <h2 class="video__title" data-reveal>Watch the <em>90-second</em> demo.</h2>
   <p class="video__body">One donation, followed from the donate button to the receipt it paid for.</p>
@@ -79,7 +79,7 @@
     <track kind="captions" srclang="en" label="English" src="/landing/media/glasshouse-demo.en.vtt" />
   </video><button class="video__play" type="button" aria-label="Play: Glasshouse 90-second demo video"><span class="video__icon" aria-hidden="true"></span><span class="video__time mono">1:31</span></button></div>
 </div></section>
-<section class="s s--pinned-sequence" id="how" aria-label="Five stops, all of them on the record." data-scene data-pin data-pin-length="560"><div class="wrap pin__inner">
+<section class="s s--pinned-sequence" id="how" data-track-section="how" aria-label="Five stops, all of them on the record." data-scene data-pin data-pin-length="560"><div class="wrap pin__inner">
   <div class="pin__head">
     <p class="eyebrow mono">How a gift travels</p>
     <h2 class="h2" data-reveal>Five stops, all of them <em>on the record</em>.</h2>
@@ -113,7 +113,7 @@
   </ol>
   <div class="pin__bar" aria-hidden="true"><span></span></div>
 </div></section>
-<section class="s s--stats-grid" id="stats-grid" aria-label="Northside Food Bank, in numbers."><div class="wrap">
+<section class="s s--stats-grid" id="stats-grid" data-track-section="stats-grid" aria-label="Northside Food Bank, in numbers."><div class="wrap">
   <p class="eyebrow mono">The demo ledger today</p>
   <h2 class="h2" data-reveal>Northside Food Bank, <em>in numbers</em>.</h2>
   <div class="stats">
@@ -139,7 +139,7 @@
   </div>
   </div>
 </div></section>
-<section class="s s--split-statement" id="held"><div class="wrap grid split">
+<section class="s s--split-statement" id="held" data-track-section="held"><div class="wrap grid split">
   <div class="split__aside">
     <p class="eyebrow mono">Held, not hidden</p>
     
@@ -150,11 +150,11 @@
     <p class="split__body">That is a real flag from the demo ledger. Another reads “looks like a duplicate of spend #5”. Held spends stay visible in amber until a trustee decides, and the reason stays on the row.</p>
   </div>
 </div></section>
-<section class="s s--cta" id="cta" aria-label="Follow one gift end to end."><div class="wrap cta__grid has-image"><div class="cta__inner">
+<section class="s s--cta" id="cta" data-track-section="cta" aria-label="Follow one gift end to end."><div class="wrap cta__grid has-image"><div class="cta__inner">
   <p class="eyebrow mono">See it for yourself</p>
   <h2 class="cta__title" data-reveal>Follow one gift <em>end to end</em>.</h2>
   <p class="cta__body">Gift 12 goes from donor to receipt to AI check to payout. Every step is on one page.</p>
-  <div class="magnet"><a class="btn btn--primary btn--lg" href="/trace/12"><span>Trace a gift</span></a></div>
+  <div class="magnet"><a class="btn btn--primary btn--lg" data-track="cta-trace" href="/trace/12"><span>Trace a gift</span></a></div>
   <p class="cta__note mono">Sandbox demo for the PayPal AI Hackathon. Northside Food Bank is a fictional charity.</p>
 </div>
   <a class="cta__shot" href="/trace/12" tabindex="-1" aria-hidden="true"><picture><source media="(prefers-color-scheme: dark)" srcset="/landing/img/trace-dark.webp" /><source media="(prefers-color-scheme: light)" srcset="/landing/img/trace.webp" /><img src="/landing/img/trace.webp" alt="" width="1100" height="688" loading="lazy" decoding="async" /></picture></a>
@@ -176,5 +176,6 @@
 </div></footer>
     <!-- first paint: place the poster exactly as placePoster() (src/core/hero-box.ts) does, before it ever paints, so it never jumps (CLS) -->
     <script>(function(){var t=document.documentElement.dataset.theme;if(t)document.querySelectorAll('picture source[media*="prefers-color-scheme"]').forEach(function(s){s.media=s.media.replace(/\(prefers-color-scheme:\s*(light|dark)\)/g,function(_,x){return x===t?'all':'not all'})})})();(function(){var p=document.querySelector('.poster'),m=document.querySelector('[data-hero-media]'),c=document.querySelector('.hero__copy');if(!p||!m)return;var d=JSON.parse(p.getAttribute('data-meta')||'{}')[matchMedia('(orientation: portrait)').matches?'phone':matchMedia('(max-width: 1360px)').matches?'mid':'desk'];if(!d)return;var w=innerWidth,h=innerHeight,r=m.getBoundingClientRect(),k=c&&c.getBoundingClientRect(),ok=r.width>10&&r.height>10,top=ok?r.top+scrollY:0,pad=Math.min(48,Math.max(16,w*0.025)),L=ok?r.left+pad:pad,R=Math.min((ok?Math.min(w,r.right):w)-pad,w-64),T,B,side=ok&&k&&k.right<=r.left+1;if(side){L=Math.max(L,k.right+32);T=top+pad;B=(ok?Math.min(top+r.height,h):h)-pad}else{L=pad;R=w-pad;T=Math.round(Math.max(h*0.6,Math.min(k&&k.height>10?k.bottom+scrollY+12:0,h-170)));B=h-pad}var s=Math.min(R-L,(B-T)*((d[4]-d[2])/(d[5]-d[3])))/1.04/(d[4]-d[2]),x=(L+R)/2-(d[2]+d[4])/2*s,y=(T+B)/2-(d[3]+d[5])/2*s;p.classList.add('poster--placed');p.style.cssText='left:'+x+'px;top:'+y+'px;width:'+d[0]*s+'px;height:'+d[1]*s+'px'})()</script>
+    <script defer src="https://thatched-tools.pages.dev/t.js" data-site="glasshouse"></script>
   </body>
 </html>

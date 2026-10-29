@@ -72,7 +72,7 @@ export default function LedgerGrid({ data }: { data: Data }) {
     { field: "reason" as any, headerName: "Why held / flags", flex: 1.4, minWidth: 200, wrapText: true, autoHeight: true, cellClass: "wrap-cell" },
     { field: "payout" as any, headerName: "Payout batch", flex: 1, minWidth: 110, tooltipField: "payout" as any },
     { field: "receipt" as any, headerName: "Receipt", flex: 1, minWidth: 150, sortable: false, filter: false, cellRenderer: (p: any) => !p.value ? null
-      : p.data.status === "approved" || p.data.status === "paid" ? <a className="receipt-link" href={p.value} target="_blank" rel="noreferrer"><FileText className="icon" aria-hidden size={16} />View receipt</a> : <span className="reader"><Hourglass className="icon" aria-hidden size={14} />After review</span> },
+      : p.data.status === "approved" || p.data.status === "paid" ? <a className="receipt-link" data-track="view-receipt" href={p.value} target="_blank" rel="noreferrer"><FileText className="icon" aria-hidden size={16} />View receipt</a> : <span className="reader"><Hourglass className="icon" aria-hidden size={14} />After review</span> },
   ], []);
 
   const spendsOnly = rows.filter((r): r is Extract<Row, { kind: "spend" }> => r.kind === "spend");
@@ -145,7 +145,7 @@ export default function LedgerGrid({ data }: { data: Data }) {
             <div className="lc-top"><strong className="lc-vendor">{r.vendor}</strong><span className="mono lc-amt">{money(r.amount)}</span></div>
             <div className="lc-meta"><StatusChip status={r.status} /><span className="muted">{r.date}</span></div>
             {r.reason && <p className="lc-reason">{r.reason}</p>}
-            {r.status === "approved" || r.status === "paid" ? <a className="receipt-link" href={r.receipt} target="_blank" rel="noreferrer"><FileText className="icon" aria-hidden size={16} />View receipt</a> : <span className="reader"><Hourglass className="icon" aria-hidden size={14} />After review</span>}
+            {r.status === "approved" || r.status === "paid" ? <a className="receipt-link" data-track="view-receipt" href={r.receipt} target="_blank" rel="noreferrer"><FileText className="icon" aria-hidden size={16} />View receipt</a> : <span className="reader"><Hourglass className="icon" aria-hidden size={14} />After review</span>}
           </article>))}
           {isOpen && list.length === 0 && <p className="muted lc-empty">No spends match.</p>}
         </section>);

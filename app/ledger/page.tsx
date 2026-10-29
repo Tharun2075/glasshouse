@@ -16,7 +16,7 @@ export default function Home() {
   const paid = l.spends.filter((s) => s.status === "paid");
   const example = held.find((s) => s.hold_reason);
   return (<>
-    <section className="hero">
+    <section className="hero" data-track-section="ledger">
       <div className="rise">
         <p className="eyebrow">Northside Food Bank · public ledger</p>
         <h1>Every dollar, <em>see through</em>.</h1>

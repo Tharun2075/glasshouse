@@ -21,6 +21,6 @@ export default function DonateForm({ appeals, donorName }: { appeals: Appeal[]; 
       ? <label className="check"><input type="checkbox" name="show_name" /> Show my name ({donorName}) on the public ledger</label>
       : <p className="muted">Giving anonymously. Sign in as a donor to show your name.</p>}
     {err && <p className="note err" role="alert">{err}</p>}
-    <p><button type="submit" disabled={busy}>{busy ? "Opening PayPal…" : "Donate with PayPal"}</button></p>
+    <p><button type="submit" disabled={busy} data-track="donate">{busy ? "Opening PayPal…" : "Donate with PayPal"}</button></p>
   </form>);
 }
