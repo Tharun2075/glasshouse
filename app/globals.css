@@ -113,7 +113,9 @@ main a:not(.btn):not(.brand):hover { text-decoration-color: var(--accent); }
 .flow .why-line { display: block; margin-top: var(--space-1); color: var(--held); font-size: var(--step--1); }
 
 /* ---- stat strip (landing .stats) ---- */
-.stats { margin-top: var(--space-5); display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); border-top: var(--hair); }
+.stats { margin-top: var(--space-5); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: var(--hair); }
+@media (max-width: 960px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .stats { grid-template-columns: minmax(0, 1fr); } }
 .stats li { padding: var(--space-4) var(--space-4) var(--space-4) 0; border-bottom: var(--hair); display: grid; gap: var(--space-2); align-content: start; }
 .stats .k { order: 2; color: var(--ink-1); font-size: var(--step--1); display: flex; gap: 6px; align-items: center; }
 .stats .v { order: 1; font-family: var(--font-display); font-weight: 400; font-size: var(--step-2); line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
@@ -139,6 +141,7 @@ main a:not(.btn):not(.brand):hover { text-decoration-color: var(--accent); }
 
 /* ---- forms ---- */
 input, select, textarea { font: inherit; color: var(--ink-0); background: transparent; min-height: 44px; padding: .7rem .9rem; border: var(--hair); border-color: var(--line-strong); border-radius: var(--radius-s); max-width: 100%; transition: border-color var(--dur-1) var(--ease); }
+input, select, textarea { font-size: max(1rem, var(--step-0)); }
 input:hover, select:hover { border-color: var(--ink-2); }
 input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
 select option { background: var(--bg-1); color: var(--ink-0); }
@@ -240,6 +243,7 @@ td.reader { display: table-cell; }
 .gridwrap .ag-cell { font-variant-numeric: tabular-nums; }
 .gridwrap .ag-paging-panel { border-top: var(--hair); color: var(--ink-1); font-size: var(--step--1); }
 .ag-paging-button { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+.gridwrap .ag-input-field-input, .gridwrap .ag-picker-field-wrapper { font-size: max(1rem, var(--step-0)); min-height: 44px; min-width: 44px; }
 .ag-cell.c-tight { padding-left: 8px; padding-right: 8px; }
 .ag-cell.wrap-cell { line-height: 1.4; padding-top: 10px; padding-bottom: 10px; white-space: normal; }
 .grid-tools { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: end; margin: var(--space-3) 0 var(--space-4); }
@@ -254,8 +258,8 @@ td.reader { display: table-cell; }
 .row-held { background: color-mix(in oklab, var(--held-bg) 45%, var(--bg-0)) !important; }
 .row-group { font-weight: 500; background: var(--bg-1) !important; }
 .row-paid .ag-cell[col-id="status"] { color: var(--paid); }
-.grid-toggle { width: 32px; height: 32px; min-height: 32px; padding: 0; border-radius: var(--radius-pill); background: transparent; color: var(--ink-0); border: var(--hair); }
-.grid-toggle:hover:not(:disabled) { background: transparent; color: var(--ink-0); border-color: var(--ink-1); }
+.grid-toggle { width: 44px; height: 44px; min-height: 44px; min-width: 44px; padding: 0; border-radius: var(--radius-pill); background: transparent; color: var(--ink-0); border: var(--hair); }
+@media (hover: hover) and (pointer: fine) { .grid-toggle:hover:not(:disabled) { background: transparent; color: var(--ink-0); border-color: var(--ink-1); } }
 .vendor-cell { line-height: 1.4; padding: 10px 0; white-space: normal; }
 .vendor-cell .why { display: none; }
 .actions { display: grid; gap: 6px; }
@@ -332,6 +336,8 @@ pre.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
   .site-header .who > span { display: none; }
   .site-header .btn--sm { padding: .6rem .85rem; min-width: 44px; justify-content: center; }
   .nl-long { display: none; } .nl-short { display: inline; }
+  .grid-tools form.nl { flex-wrap: wrap; flex-basis: 100%; }
+  .grid-tools form.nl .field, .grid-tools form.nl button { flex: 1 1 100%; width: 100%; }
   .site-footer__grid { grid-template-columns: 1fr; }
   .panel { padding: var(--space-4); }
   .trace-row { grid-template-columns: 1fr; }

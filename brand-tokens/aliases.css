@@ -54,3 +54,4 @@
   color-scheme: light;
 }
 [data-theme="dark"] { --accent-ink: var(--bg); color-scheme: dark; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --accent-ink: var(--bg); color-scheme: dark; } }
