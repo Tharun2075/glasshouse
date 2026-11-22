@@ -16,7 +16,7 @@
     <link rel="icon" href="/landing/icon-192.png" type="image/png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/landing/apple-touch-icon.png" />
     <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('gh-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
-    <script type="module" crossorigin src="/landing/assets/index-DQkyw4zc.js"></script>
+    <script type="module" crossorigin src="/landing/assets/index-gzfJgob9.js"></script>
     <link rel="modulepreload" crossorigin href="/landing/assets/motion-BmD6kqmK.js">
     <link rel="modulepreload" crossorigin href="/landing/assets/theme-BIKfw2wF.js">
     <link rel="modulepreload" crossorigin href="/landing/assets/tiers-CYR1qb0w.js">
@@ -35,7 +35,10 @@
         <span class="preloader__bar" aria-hidden="true"><span id="pl-bar"></span></span>
       </div>
     </div>
-    <picture class="poster" aria-hidden="true" data-meta='{"desk":[1440,900,779.9,210.9,1364.1,721.1],"mid":[1280,760,694.4,194.4,1205.6,640.7],"phone":[390,844,23,516.4,367,817.6]}'>
+    <!-- row 2: the poster <source>s are written by this script, never in the HTML, so the preload scanner cannot fetch
+         the OS-scheme poster before the stored theme (data-theme, set in <head>) is known: exactly one poster loads -->
+    <picture class="poster" aria-hidden="true" data-meta='{"desk":[1440,900,779.9,210.9,1364.1,721.1],"mid":[1280,760,694.4,194.4,1205.6,640.7],"phone":[390,844,23,516.4,367,817.6]}'><script>(function(){var p=document.currentScript.parentNode,t=document.documentElement.dataset.theme,V=[['portrait','phone'],['landscape) and (max-width: 1360px','mid'],['landscape','desk']],h='';['avif','webp'].forEach(function(f){(t?[t]:['dark','light']).forEach(function(c){V.forEach(function(v){h+='<source type="image/'+f+'" media="'+(t?'':'(prefers-color-scheme: '+c+') and ')+'(orientation: '+v[0]+')" srcset="/landing/img/poster-'+c+'-'+v[1]+'.'+f+'" />'})})});p.insertAdjacentHTML('beforeend',h+'<img src="/landing/img/poster-'+(t||'dark')+'-desk.webp" alt="" width="2880" height="1800" fetchpriority="high" decoding="async" />')})()</script></picture>
+    <noscript><picture class="poster" aria-hidden="true">
       <source type="image/avif" media="(prefers-color-scheme: dark) and (orientation: portrait)" srcset="/landing/img/poster-dark-phone.avif" />
       <source type="image/avif" media="(prefers-color-scheme: dark) and (orientation: landscape) and (max-width: 1360px)" srcset="/landing/img/poster-dark-mid.avif" />
       <source type="image/avif" media="(prefers-color-scheme: dark) and (orientation: landscape)" srcset="/landing/img/poster-dark-desk.avif" />
@@ -49,7 +52,7 @@
       <source type="image/webp" media="(prefers-color-scheme: light) and (orientation: landscape) and (max-width: 1360px)" srcset="/landing/img/poster-light-mid.webp" />
       <source type="image/webp" media="(prefers-color-scheme: light) and (orientation: landscape)" srcset="/landing/img/poster-light-desk.webp" />
       <img src="/landing/img/poster-dark-desk.webp" alt="" width="2880" height="1800" fetchpriority="high" decoding="async" />
-    </picture>
+    </picture></noscript>
     <canvas id="gl" aria-hidden="true"></canvas>
     <div class="scrim" aria-hidden="true"></div>
     <header class="site-header"><div class="wrap site-header__inner">
